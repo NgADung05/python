@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lộ trình Python cho Kỹ sư AI</title>
+<meta name="description" content="Sơ đồ lộ trình 8 tuần học Python cho Kỹ sư AI: từ Python cốt lõi đến NumPy, ML, PyTorch, LLM và RAG.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#E7EDF1; --card:#F6F9FB; --ink:#14263A; --muted:#566B7D; --rule:#C6D2DB;
+  --lA:#0E8A8F; --lB:#6B4BE6; --lC:#D6336C; --lD:#C98A00; --lF:#2F9E5F; --lE:#14263A;
+  --sel:#14263A;
+  --display:"Bricolage Grotesque","Be Vietnam Pro",system-ui,sans-serif;
+  --body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0F1C28; --card:#172735; --ink:#E4EDF3; --muted:#92A6B6; --rule:#2B4052;
+    --lA:#3CC4C9; --lB:#A18BFF; --lC:#FF6F9F; --lD:#F2B53A; --lF:#5CD08B; --lE:#E4EDF3; --sel:#E4EDF3;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0F1C28; --card:#172735; --ink:#E4EDF3; --muted:#92A6B6; --rule:#2B4052;
+  --lA:#3CC4C9; --lB:#A18BFF; --lC:#FF6F9F; --lD:#F2B53A; --lF:#5CD08B; --lE:#E4EDF3; --sel:#E4EDF3;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 15px/1.6 var(--body);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--sel);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1560px;margin:0 auto;padding:0 20px}
+h1,h2,h3{font-family:var(--display);line-height:1.1;margin:0;letter-spacing:-.01em}
+
+/* masthead */
+.mast{padding:44px 0 26px;display:grid;gap:22px;grid-template-columns:1fr;align-items:end}
+.mast h1{font-weight:800;font-size:clamp(34px,6.4vw,76px);letter-spacing:-.03em;max-width:15ch}
+.mast p{margin:14px 0 0;max-width:56ch;color:var(--muted)}
+.prog{min-width:260px}
+.prog b{font:700 34px/1 var(--display)}
+.prog small{color:var(--muted);display:block;margin-top:4px}
+.bar{height:8px;background:var(--rule);border-radius:99px;margin-top:12px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--lA);border-radius:99px;transition:width .4s}
+.tools{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.btn{background:transparent;border:1.5px solid var(--ink);border-radius:99px;padding:5px 14px;font-size:13px}
+.btn:hover{background:var(--ink);color:var(--paper)}
+@media(min-width:860px){.mast{grid-template-columns:1fr auto}}
+
+/* layout: diagram + panel */
+.stage{display:grid;gap:28px;grid-template-columns:1fr;padding-bottom:40px}
+@media(min-width:1080px){.stage{grid-template-columns:minmax(0,1fr) var(--pw,620px)}.stage.xl{--pw:min(60vw,860px)}}
+.pexp{float:right;margin-right:8px;background:none;border:1.5px solid var(--ink);border-radius:99px;height:34px;padding:0 14px;font-size:13px}
+.pexp:hover{background:var(--ink);color:var(--paper)}
+@media(max-width:1079px){.pexp{display:none}}
+.panel{font-size:16px}
+.stage.xl .panel .kcols{columns:2;column-gap:36px}
+.diagram{min-width:0}
+.panel{background:var(--card);border:1.5px solid var(--ink);border-radius:14px;padding:26px 30px 32px;position:sticky;top:16px;max-height:calc(100vh - 32px);overflow:auto;align-self:start}
+@media(max-width:1079px){
+  .panel{position:fixed;left:0;right:0;bottom:0;top:auto;max-height:82vh;border-radius:18px 18px 0 0;z-index:20;transform:translateY(105%);transition:transform .28s ease;box-shadow:0 -12px 40px rgba(0,0,0,.25)}
+  .panel.open{transform:none}
+  .scrim{position:fixed;inset:0;background:rgba(10,20,30,.45);z-index:19;display:none}
+  .scrim.on{display:block}
+}
+@media(min-width:1080px){.scrim{display:none!important}.pclose{display:none!important}}
+.pclose{float:right;background:none;border:1.5px solid var(--ink);width:34px;height:34px;border-radius:50%;font-size:18px;line-height:1}
+.pcode{display:inline-flex;align-items:center;gap:8px;font:700 13px var(--display);color:var(--pc,var(--ink))}
+.pcode i{width:12px;height:12px;border-radius:50%;background:var(--pc,var(--ink))}
+.panel h2{font-size:27px;margin:10px 0 4px;font-weight:700}
+.meta{display:flex;flex-wrap:wrap;gap:6px 14px;color:var(--muted);font-size:13px;margin:6px 0 4px}
+.panel h3{font-size:15px;margin:22px 0 8px;font-weight:700}
+.panel ul{margin:0;padding-left:18px}
+.panel li{margin:5px 0}
+.panel li::marker{color:var(--pc,var(--ink))}
+.why{border-left:4px solid var(--pc,var(--ink));padding:2px 0 2px 12px;margin:0}
+.ex{list-style:none;padding:0!important}
+.ex li{display:grid;grid-template-columns:22px 1fr;gap:8px;padding:9px 0;border-top:1px solid var(--rule);margin:0}
+.ex input{width:18px;height:18px;margin:3px 0 0;accent-color:var(--pc,var(--ink))}
+.ex label{cursor:pointer;display:block}
+.ex .id{font:700 12px var(--display);margin-right:6px}
+.lv{display:inline-block;font-size:11.5px;font-weight:600;border:1.5px solid currentColor;border-radius:99px;padding:0 8px;margin-right:6px;line-height:1.5}
+.lv.de{color:var(--lA)}.lv.tb{color:var(--lD)}.lv.kho{color:var(--lC)}
+.ex input:checked+label{color:var(--muted);text-decoration:line-through;text-decoration-thickness:1px}
+.kv{margin:0 0 12px}.kv b{display:block;font-size:13px;color:var(--muted);font-weight:600}
+.rowcard{border-top:1px solid var(--rule);padding:12px 0}
+.rowcard:first-of-type{border-top:0}
+.rowcard h4{margin:0 0 4px;font:700 16px var(--display)}
+.rowcard .tick{display:flex;gap:8px;align-items:flex-start}
+.rowcard .tick input{width:18px;height:18px;margin-top:3px;accent-color:var(--pc)}
+.rowcard dl{margin:6px 0 0}.rowcard dt{font-size:12px;color:var(--muted)}.rowcard dd{margin:0 0 5px}
+.chip{display:inline-block;border:1.5px solid var(--ink);background:transparent;border-radius:6px;padding:0 6px;margin:0 1px;font:700 12.5px/1.5 var(--display);color:var(--ink)}
+button.chip:hover{background:var(--ink);color:var(--paper)}
+.wk{display:inline-block;background:var(--ink);color:var(--paper);border:0;border-radius:6px;padding:0 7px;font:700 12.5px/1.6 var(--display);margin-right:4px}
+
+/* weeks line */
+.sec-h{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin:0 0 4px}
+.sec-h h2{font-size:clamp(24px,3vw,34px);font-weight:700}
+.sec-h p{margin:0;color:var(--muted);font-size:14px}
+.line{margin:0 0 40px}
+.line-head{display:flex;align-items:center;gap:12px;margin:0 0 4px}
+.badge{flex:none;width:38px;height:38px;border-radius:50%;background:var(--lc);color:var(--paper);display:grid;place-items:center;font:800 20px var(--display)}
+.line-head h2{font-size:clamp(22px,2.6vw,30px);font-weight:700}
+.line-head p{margin:0;color:var(--muted);font-size:14px}
+.host{position:relative;margin-top:6px}
+.host svg.track{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
+.st{position:absolute;background:none;border:0;padding:0;display:flex;flex-direction:column;align-items:center;text-align:center;transition:opacity .2s}
+.st .dot{width:32px;height:32px;display:block;transition:transform .15s}
+.st:hover .dot{transform:scale(1.18)}
+.st .lab{font-size:12.5px;line-height:1.3;margin-top:2px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.st .lab b{display:block;font:700 12.5px var(--display);color:var(--lc)}
+.st.dim{opacity:.22}
+.st.sel .lab{font-weight:600}
+.st.sel .dot{transform:scale(1.25)}
+.st.sel .dot circle.ring{display:block}
+.dot circle.ring{display:none}
+.legend{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:13px;color:var(--muted);margin:10px 0 28px;align-items:center}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{border-radius:50%;border:4px solid var(--ink);background:var(--paper);display:inline-block}
+.weekbox{background:var(--card);border:1.5px solid var(--ink);border-radius:14px;padding:18px 20px;margin:-8px 0 38px}
+.weekbox[hidden]{display:none}
+.weekbox h3{font-size:20px;font-weight:700}
+.weekbox .goal{color:var(--muted);margin:4px 0 12px}
+.dayrow{display:grid;grid-template-columns:120px 1fr;gap:4px 16px;padding:9px 0;border-top:1px solid var(--rule)}
+.dayrow .d{font-weight:600}
+.dayrow .c small{display:block;color:var(--muted);font-size:12px}
+@media(max-width:620px){.dayrow{grid-template-columns:1fr}}
+.clear{margin-top:10px}
+
+/* lower sections */
+.lower{border-top:1.5px solid var(--ink);padding:36px 0 70px;display:grid;gap:56px}
+.qa details{border-top:1px solid var(--rule);padding:12px 0}
+.qa summary{cursor:pointer;font-weight:600;list-style:none;display:flex;gap:10px}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::before{content:"+";font:700 18px/1.3 var(--display);width:16px;flex:none}
+.qa details[open] summary::before{content:"–"}
+.qa .ans{margin:8px 0 2px 26px;color:var(--muted)}
+.qa .grp{font-size:12px;color:var(--lB);font-weight:600;margin-right:6px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 8px}
+.filters button{border:1.5px solid var(--ink);background:transparent;border-radius:99px;padding:3px 14px;font-size:13px}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.res{display:grid;gap:0;margin-top:12px}
+.res div{display:grid;grid-template-columns:200px 1fr;gap:16px;padding:12px 0;border-top:1px solid var(--rule)}
+@media(max-width:640px){.res div{grid-template-columns:1fr;gap:2px}}
+.res b{font-family:var(--display);font-size:16px}
+.check{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:0 36px;grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.check li{display:grid;grid-template-columns:22px 1fr;gap:8px;padding:9px 0;border-top:1px solid var(--rule)}
+.check input{width:18px;height:18px;margin-top:3px;accent-color:var(--lF)}
+.check input:checked+label{color:var(--muted);text-decoration:line-through}
+.libs{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}
+.libs td{padding:9px 12px 9px 0;border-top:1px solid var(--rule);vertical-align:top}
+.libs td:first-child{font-weight:600;white-space:nowrap;padding-right:22px}
+.libs code{font:13px ui-monospace,Menlo,monospace}
+.two{display:grid;gap:40px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.star li{margin:6px 0}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="mast">
+    <div>
+      <h1>Lộ trình Python cho Kỹ sư AI</h1>
+      <p>Tám tuần, từ 19/10 đến 13/12/2026: Python cốt lõi, dữ liệu, machine learning, PyTorch, rồi LLM và RAG. Bấm vào một ga để xem kiến thức, lý do cần học và bài tập.</p>
+      <div class="tools">
+        <button class="btn" id="themeBtn" type="button">Đổi giao diện sáng/tối</button>
+        <button class="btn" id="resetBtn" type="button">Xoá tiến độ</button>
+      </div>
+    </div>
+    <div class="prog" aria-live="polite">
+      <b id="pctNum">0%</b>
+      <small id="pctTxt">0/0 bài đã làm</small>
+      <div class="bar"><i id="pctBar"></i></div>
+    </div>
+  </header>
+
+  <div class="stage">
+    <main class="diagram" id="diagram">
+      <section class="line" id="lineE" style="--lc:var(--lE)">
+        <div class="line-head"><span class="badge">8</span><div><h2>Lịch 8 tuần</h2><p>Chọn một tuần để làm nổi bật các ga cần học trên sơ đồ bên dưới.</p></div></div>
+        <div class="host" id="hostE"></div>
+        <div class="weekbox" id="weekbox" hidden></div>
+      </section>
+
+      <div class="legend" aria-label="Chú giải">
+        <span><i style="width:26px;height:26px"></i>Bắt buộc (★★★)</span>
+        <span><i style="width:20px;height:20px"></i>Nên học (★★)</span>
+        <span><i style="width:14px;height:14px"></i>Tuỳ chọn (★)</span>
+        <span>Ga tô màu = đã làm hết bài tập</span>
+      </div>
+
+      <div id="lines"></div>
+    </main>
+
+    <aside class="panel" id="panel" aria-label="Chi tiết" tabindex="-1"></aside>
+  </div>
+  <div class="scrim" id="scrim"></div>
+
+  <div class="lower">
+    <section id="secI">
+      <div class="sec-h"><h2>Checklist cuối lộ trình</h2><p id="chkCount"></p></div>
+      <p id="chkIntro" style="color:var(--muted);margin:6px 0 0"></p>
+      <ul class="check" id="chk"></ul>
+    </section>
+    <section id="secG" class="qa">
+      <div class="sec-h"><h2>Câu hỏi phỏng vấn</h2><p id="gIntro"></p></div>
+      <div class="filters" id="gFilters"></div>
+      <div id="gList"></div>
+    </section>
+    <section class="two">
+      <div id="secH">
+        <div class="sec-h"><h2>Nguồn học</h2></div>
+        <p id="hIntro" style="color:var(--muted);margin:6px 0 0"></p>
+        <div class="res" id="hList"></div>
+      </div>
+      <div id="secL">
+        <div class="sec-h"><h2>Thư viện cần cài</h2></div>
+        <table class="libs" id="libs"></table>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+const DATA = {"P0": {"goals": ["**★★★ Bắt** **buộc** — phải xong trước khi thực tập.", "**★★ Nên** **học** — học nếu còn thời gian; nếu thiếu thời gian, học ở mức đọc hiểu và chạy thử.", "**★ Tuỳ** **chọn** — chỉ cần nắm khái niệm."], "rhythm": ["Khung thời gian lấy theo file cũ: **2 giờ/ngày** ngày thường, **3,5 giờ** Thứ 7, **3 giờ** Chủ nhật (≈ 17 giờ/tuần, ≈ 136 giờ cho 8 tuần).", "Mỗi buổi: 30% đọc/xem — 70% gõ code. Không chép code; đọc xong hãy đóng tài liệu và tự viết lại.", "Mỗi mục có bảng bài tập (Dễ → TB → Khó). Làm hết bài Dễ/TB; bài Khó làm nếu còn thời gian. Đánh dấu cột 'Xong'.", "Mỗi tuần: 2–3 bài LeetCode (xem Phần D) và đẩy toàn bộ code lên GitHub vào Chủ nhật.", "Cuối mỗi tuần tự hỏi: 'Mình giải thích được những gì đã học cho người khác không?' Nếu không, ôn lại thay vì học tiếp.", "Gym và tiếng Anh giữ nguyên lịch cũ của bạn; nên đọc tài liệu kỹ thuật tiếng Anh ngay trong lúc học (docs, README) để luyện song song."], "libs": [["Công cụ chung", "python-dotenv, requests, httpx, pytest, ruff, black, mypy", "Phần A"], ["Web API", "fastapi, uvicorn, pydantic", "A13"], ["Dữ liệu", "numpy, pandas, matplotlib, seaborn, jupyter", "B1–B3"], ["ML cổ điển", "scikit-learn, xgboost, lightgbm, joblib", "B4"], ["Deep Learning", "torch, torchvision", "B5"], ["NLP / LLM", "transformers, datasets, sentence-transformers, underthesea, SDK của nhà cung cấp LLM", "B6–B7"], ["Retrieval / RAG", "qdrant-client (hoặc chromadb, faiss-cpu), rank-bm25, pypdf, pdfplumber, ragas, langfuse", "B8"], ["UI & triển khai", "streamlit hoặc gradio, mlflow; Docker", "B10"]]}, "A": {"intro": "14 mục nền tảng từ môi trường làm việc đến xây dựng API. Hoàn thành trong Tuần 1–3.", "mods": [{"id": "A1", "title": "Môi trường & công cụ làm việc", "k": ["Cài Python 3.11 hoặc 3.12; phân biệt REPL, chạy script python file.py, chạy module python -m.", "Môi trường ảo: python -m venv .venv, kích hoạt/thoát; pip install, pip freeze > requirements.txt; làm quen uv (trình quản lý gói rất nhanh) và pyproject.toml.", "VS Code + extension Python, Jupyter Notebook, Google Colab (GPU miễn phí để học PyTorch).", "Git cơ bản: init, add, commit, status, log, branch, push, file .gitignore; tạo repo GitHub và đẩy code.", "Biết đọc traceback từ dưới lên: dòng cuối là loại lỗi, các dòng trên là đường đi của lỗi."], "ai": "Mỗi dự án AI phụ thuộc nhiều thư viện nặng (torch, transformers...) nên bắt buộc dùng môi trường ảo riêng. Colab cho GPU để thử mô hình. Repo GitHub sạch chính là 'CV' khi đi xin thực tập.", "ex": [{"id": "A1.1", "lv": "Dễ", "t": "Tạo venv, cài requests, xuất requirements.txt, xóa venv rồi dựng lại hoàn toàn từ file đó."}, {"id": "A1.2", "lv": "Dễ", "t": "Tạo repo GitHub python-foundation; mỗi bài tập là 1 commit có message rõ ràng; .gitignore chứa .venv, .env, __pycache__."}, {"id": "A1.3", "lv": "TB", "t": "Mở Colab, in phiên bản Python, kiểm tra GPU bằng !nvidia-smi, cài 1 thư viện và import thử."}], "prio": 3, "hours": 3}, {"id": "A2", "title": "Cú pháp cơ bản & kiểu dữ liệu", "k": ["Biến, kiểu int, float, str, bool, None; ép kiểu; type(), isinstance().", "Toán tử số học (//, %, **), so sánh, logic and/or/not; khác biệt == và is.", "Nhập/xuất: input(), print(sep=, end=); f-string và định dạng số {x:.2f}, {n:,}.", "Mutable vs immutable; truthy/falsy (0, '', [], None là False).", "Quy ước PEP 8: đặt tên snake_case, thụt lề 4 dấu cách, docstring, comment."], "ai": "Sai số dấu phẩy động (0.1 + 0.2) ảnh hưởng khi so sánh loss/metric. None dùng biểu diễn dữ liệu thiếu. f-string là cách xây dựng prompt gửi cho LLM.", "ex": [{"id": "A2.1", "lv": "Dễ", "t": "Hàm tính BMI và phân loại (gầy/bình thường/thừa cân/béo phì)."}, {"id": "A2.2", "lv": "Dễ", "t": "Kiểm tra năm nhuận; đổi nhiệt độ C ↔ F và in bảng từ 0 đến 100 độ."}, {"id": "A2.3", "lv": "TB", "t": "Nhập chuỗi 3 5 7 9, tính trung bình và độ lệch chuẩn bằng công thức (không dùng thư viện)."}, {"id": "A2.4", "lv": "TB", "t": "Giải thích vì sao 0.1 + 0.2 S!= 0.3 và sửa phép so sánh bằng math.isclose."}], "prio": 3, "hours": 4}, {"id": "A3", "title": "Cấu trúc điều khiển", "k": ["if/elif/else, toán tử điều kiện một dòng, match-case (Python 3.10+).", "Vòng lặp for, while, break, continue, else của vòng lặp; range, enumerate, zip, reversed.", "Lặp lồng nhau, độ phức tạp thời gian của vòng lặp lồng (O(n²))."], "ai": "Vòng lặp huấn luyện = lặp qua epoch, rồi qua batch. Cần tự tay viết logic chia batch để hiểu DataLoader làm gì.", "ex": [{"id": "A3.1", "lv": "Dễ", "t": "FizzBuzz; in tam giác sao; bảng cửu chương."}, {"id": "A3.2", "lv": "TB", "t": "Sàng Eratosthenes: liệt kê số nguyên tố ≤ N."}, {"id": "A3.3", "lv": "TB", "t": "Trò chơi đoán số 1–100, giới hạn 7 lần, báo cao/thấp."}, {"id": "A3.4", "lv": "Khó", "t": "Viết hàm chia list thành các batch kích thước k (phần dư là batch cuối) — mô phỏng DataLoader."}], "prio": 3, "hours": 4}, {"id": "A4", "title": "Cấu trúc dữ liệu: str, list, tuple, dict, set", "k": ["**String**: slicing s[1:5], s[::-1], split, join, strip, replace, find, startswith, lower; chuỗi là bất biến; Unicode & encode/decode (quan trọng với tiếng Việt).", "**List**: append, extend, insert, pop, remove, sort, reverse; slicing; sao chép nông vs sâu (copy vs deepcopy); list 2 chiều.", "**Tuple**: bất biến, unpacking a, b = b, a, *rest.", "**Dict**: get, items, keys, values, setdefault, update, gộp bằng |; vì sao tra cứu O(1) trung bình (bảng băm).", "**Set**: loại trùng, phép toán | & - ^; kiểm tra x in set O(1) so với x in list O(n).", "Module collections: Counter, defaultdict, deque, namedtuple; module heapq."], "ai": "Dict ↔ JSON ↔ payload của API. set loại tài liệu trùng. Counter làm bag-of-words/TF. Bảng từ vựng (word → id) là nền của tokenizer.", "ex": [{"id": "A4.1", "lv": "Dễ", "t": "Đảo ngược chuỗi; kiểm tra palindrome (bỏ dấu cách và dấu câu)."}, {"id": "A4.2", "lv": "Dễ", "t": "Đếm tần suất từ trong một đoạn văn, in 10 từ phổ biến nhất bằng Counter."}, {"id": "A4.3", "lv": "TB", "t": "LeetCode #1 Two Sum bằng dict; giải thích độ phức tạp so với cách duyệt hai vòng."}, {"id": "A4.4", "lv": "TB", "t": "Gộp hai dict điểm của sinh viên (cộng điểm cùng khóa); nhóm các từ thành các nhóm anagram."}, {"id": "A4.5", "lv": "Khó", "t": "Xây bảng từ vựng từ 5 câu: dict word → index, đổi mỗi câu thành list id, rồi đổi ngược lại thành câu."}], "prio": 3, "hours": 8}, {"id": "A5", "title": "Hàm, decorator & type hints", "k": ["Định nghĩa hàm, tham số mặc định (**bẫy mutable default** def f(x=[])), *args, **kwargs, tham số keyword-only, trả về nhiều giá trị.", "Phạm vi biến (LEGB), global/nonlocal, closure; lambda, map/filter, sorted(key=...); hàm bậc cao.", "**Decorator**: hàm nhận hàm trả hàm; functools.wraps; decorator có tham số.", "**Type hints**: list[int], dict[str, float], Optional, Union (X | None), Callable, TypeVar; docstring kiểu Google.", "Đệ quy, ghi nhớ kết quả (memoization), functools.lru_cache."], "ai": "@app.get (FastAPI), @observe (Langfuse), @torch.no_grad(), retry cho API đều là decorator. *args/**kwargs xuất hiện ở hầu hết API ML. Type hints là nền tảng của Pydantic và FastAPI.", "ex": [{"id": "A5.1", "lv": "Dễ", "t": "Hàm thống kê trả về (mean, median, mode)."}, {"id": "A5.2", "lv": "TB", "t": "Tái hiện bẫy mutable default argument rồi sửa lỗi."}, {"id": "A5.3", "lv": "TB", "t": "Decorator @timer đo thời gian chạy; decorator @retry(times=3) thử lại khi hàm ném lỗi."}, {"id": "A5.4", "lv": "TB", "t": "Sắp xếp list dict (học sinh) theo điểm giảm dần rồi theo tên tăng dần bằng sorted + lambda."}, {"id": "A5.5", "lv": "Khó", "t": "Tự viết decorator @cache cho Fibonacci, đo thời gian và so với functools.lru_cache."}], "prio": 3, "hours": 8}, {"id": "A6", "title": "Comprehension, generator, iterator, itertools", "k": ["List/dict/set comprehension, có điều kiện, lồng nhau; generator expression.", "Hàm sinh yield; giao thức iterator (__iter__, __next__); lazy evaluation.", "itertools (chain, islice, product, combinations, groupby), functools (reduce, partial), any/all, unpacking */**."], "ai": "Generator giúp đọc dataset lớn từng phần, không nạp hết vào RAM. DataLoader chính là một iterator. Streaming token từ LLM trả về dưới dạng generator.", "ex": [{"id": "A6.1", "lv": "Dễ", "t": "Bình phương các số chẵn trong list; chuyển vị ma trận bằng comprehension."}, {"id": "A6.2", "lv": "TB", "t": "Generator đọc file lớn theo từng dòng; generator batch(iterable, size)."}, {"id": "A6.3", "lv": "TB", "t": "Generator Fibonacci vô hạn kết hợp itertools.islice."}, {"id": "A6.4", "lv": "Khó", "t": "Class EpochIterator: mỗi epoch trộn ngẫu nhiên dữ liệu rồi trả về từng batch."}], "prio": 3, "hours": 5}, {"id": "A7", "title": "File, JSON/CSV, đường dẫn, biến môi trường, CLI", "k": ["with open(path, encoding='utf-8'), các chế độ r/w/a; đọc theo dòng.", "json (load/dump, ensure_ascii=False), csv (DictReader), định dạng JSONL; yaml/toml cho cấu hình.", "pathlib.Path, os, shutil, glob; datetime.", "Biến môi trường: os.getenv, python-dotenv và file .env; argparse hoặc typer để làm CLI."], "ai": "Dataset thường là CSV/JSON/JSONL; JSONL là định dạng chuẩn khi fine-tune. API key luôn đặt trong .env, tuyệt đối không commit lên GitHub.", "ex": [{"id": "A7.1", "lv": "Dễ", "t": "Đọc file JSON danh sách câu hỏi và in ra có đánh số."}, {"id": "A7.2", "lv": "TB", "t": "Chuyển file CSV sang JSONL (giữ đúng tiếng Việt có dấu)."}, {"id": "A7.3", "lv": "TB", "t": "Script duyệt thư mục, đếm số file theo phần mở rộng."}, {"id": "A7.4", "lv": "TB", "t": "CLI: python tool.py --input data.csv --n 5; đọc API_KEY từ .env, đảm bảo .env có trong .gitignore."}, {"id": "A7.5", "lv": "Khó", "t": "Đọc file log, thống kê số lỗi theo từng giờ bằng datetime và Counter."}], "prio": 3, "hours": 5}, {"id": "A8", "title": "Xử lý lỗi, logging, debug, context manager", "k": ["try/except/else/finally, raise, lớp exception tự định nghĩa, raise ... from ..., assert.", "logging (level, handler, format) thay cho print; debug bằng breakpoint()/pdb hoặc debugger của VS Code.", "Context manager: with, __enter__/__exit__, contextlib.contextmanager."], "ai": "API LLM thường lỗi timeout/rate limit nên cần retry với exponential backoff. Log latency và số token để theo dõi chi phí.", "ex": [{"id": "A8.1", "lv": "Dễ", "t": "Hàm chia an toàn xử lý ZeroDivisionError và kiểu dữ liệu sai."}, {"id": "A8.2", "lv": "TB", "t": "Exception riêng InvalidQuestionError (câu hỏi rỗng/quá dài)."}, {"id": "A8.3", "lv": "TB", "t": "Retry với exponential backoff cho hàm giả lập gọi API (lỗi ngẫu nhiên 50%)."}, {"id": "A8.4", "lv": "TB", "t": "Cấu hình logging ghi cả ra console và file; context manager đo thời gian."}, {"id": "A8.5", "lv": "Khó", "t": "Hàm đọc JSON an toàn, xử lý FileNotFoundError, UnicodeDecodeError, JSONDecodeError với thông báo rõ ràng."}], "prio": 3, "hours": 4}, {"id": "A9", "title": "Lập trình hướng đối tượng (OOP)", "k": ["class, __init__, self, thuộc tính lớp vs thuộc tính đối tượng; @classmethod, @staticmethod, @property.", "Kế thừa, super(), đa hình, lớp trừu tượng abc.ABC; ưu tiên composition hơn inheritance.", "Phương thức đặc biệt: __repr__, __str__, __eq__, __len__, __getitem__, __call__, __add__.", "@dataclass (field, frozen); nguyên tắc SOLID ở mức khái niệm."], "ai": "Mọi mạng PyTorch là lớp kế thừa nn.Module (và __call__ gọi forward). Mọi estimator của scikit-learn có fit/predict. Dự án RAG cần các lớp Document, Chunk, Retriever.", "ex": [{"id": "A9.1", "lv": "Dễ", "t": "Lớp Document(content, source, page_number) có __repr__."}, {"id": "A9.2", "lv": "Dễ", "t": "Lớp BankAccount có kiểm tra số dư; lớp Stack, Queue."}, {"id": "A9.3", "lv": "TB", "t": "@dataclass Chunk với phương thức to_dict(); lớp Vector có __add__, __mul__, dot, norm."}, {"id": "A9.4", "lv": "TB", "t": "Hệ thống hình học: Shape trừu tượng, Circle/Rectangle kế thừa, minh hoạ đa hình."}, {"id": "A9.5", "lv": "Khó", "t": "Lớp trừu tượng BaseModel có fit/predict; viết MeanPredictor rồi sau này LinearRegressionScratch (sau khi học NumPy) theo cùng giao diện."}], "prio": 3, "hours": 8}, {"id": "A10", "title": "Module, package, cấu trúc dự án, kiểm thử (pytest)", "k": ["import, from ... import, if __name__ == '__main__', __init__.py, import tuyệt đối/tương đối.", "Cấu trúc dự án: src/, tests/, pyproject.toml, README; cài ở chế độ phát triển pip install -e ..", "pytest: assert, fixture, parametrize, mock/monkeypatch; đo độ phủ với coverage.", "Định dạng & kiểm tra: ruff, black, mypy."], "ai": "Code ML nên tách thành xử lý dữ liệu, mô hình, đánh giá để kiểm thử được. Test giúp phát hiện hồi quy khi thay đổi pipeline.", "ex": [{"id": "A10.1", "lv": "Dễ", "t": "Tách các hàm tiện ích sang utils.py rồi import vào main.py."}, {"id": "A10.2", "lv": "TB", "t": "Viết 5 test cho hàm làm sạch văn bản; parametrize test palindrome."}, {"id": "A10.3", "lv": "TB", "t": "Dùng mock để thay hàm gọi API thật bằng giả; chạy ruff và black."}, {"id": "A10.4", "lv": "Khó", "t": "Dự án text_toolkit: package + tests + README + pyproject.toml, cài được bằng pip install -e .."}], "prio": 3, "hours": 6}, {"id": "A11", "title": "Regex & xử lý văn bản (kể cả tiếng Việt)", "k": ["Module re: search, match, findall, sub, compile, nhóm bắt, named group, flags.", "Chuẩn hoá Unicode với unicodedata (NFC/NFD) — lỗi 'cùng chữ nhưng khác mã' rất hay gặp ở tiếng Việt; bỏ dấu tiếng Việt.", "Tách câu, tách từ cơ bản; thư viện tách từ tiếng Việt như underthesea, pyvi; stopword."], "ai": "Làm sạch văn bản trước khi chunking/embedding quyết định chất lượng RAG. Dữ liệu thu thập từ web/PDF thường có ký tự rác, xuống dòng sai.", "ex": [{"id": "A11.1", "lv": "Dễ", "t": "Trích email và số điện thoại Việt Nam từ đoạn văn."}, {"id": "A11.2", "lv": "TB", "t": "Hàm làm sạch văn bản: bỏ URL, thẻ HTML, ký tự lạ, gộp khoảng trắng, chuẩn hoá NFC."}, {"id": "A11.3", "lv": "TB", "t": "Hàm bỏ dấu tiếng Việt; hàm tách câu theo . ? !."}, {"id": "A11.4", "lv": "Khó", "t": "Tokenizer tự viết + đếm tần suất + loại stopword; so sánh với kết quả của underthesea."}], "prio": 3, "hours": 5}, {"id": "A12", "title": "Đồng thời: threading, multiprocessing, asyncio", "k": ["GIL là gì; tác vụ I/O-bound (mạng, đĩa) vs CPU-bound (tính toán).", "threading/ThreadPoolExecutor cho I/O; multiprocessing/ProcessPoolExecutor cho CPU.", "asyncio: async/await, event loop, asyncio.gather, Semaphore, wait_for (timeout); httpx.AsyncClient."], "ai": "Gọi song song nhiều request LLM/embedding để tăng tốc; dùng Semaphore để không vượt rate limit; FastAPI chạy trên async.", "ex": [{"id": "A12.1", "lv": "Dễ", "t": "So sánh tải 10 URL tuần tự vs ThreadPoolExecutor (đo thời gian)."}, {"id": "A12.2", "lv": "TB", "t": "asyncio.gather 5 lời gọi giả lập (asyncio.sleep), rồi giới hạn đồng thời bằng Semaphore(2)."}, {"id": "A12.3", "lv": "TB", "t": "multiprocessing.Pool đếm số nguyên tố, so với chạy đơn luồng."}, {"id": "A12.4", "lv": "Khó", "t": "Async batch embedder: chia 100 văn bản thành batch 10, giới hạn 3 request đồng thời, có retry khi lỗi."}], "prio": 3, "hours": 6}, {"id": "A13", "title": "Web API: HTTP, FastAPI, Pydantic", "k": ["HTTP: GET/POST/PUT/DELETE, status code (200, 201, 400, 401, 404, 422, 500), header, JSON; requests/httpx.", "**Pydantic v2**: BaseModel, Field, validator, model_dump(), lồng nhau, Optional.", "**FastAPI**: path/query/body parameter, response_model, dependency injection, middleware, BackgroundTasks, StreamingResponse (SSE), CORS, tài liệu tự sinh /docs.", "Chạy bằng uvicorn; cấu trúc thư mục routers/ services/ models/."], "ai": "Đưa mô hình/pipeline RAG thành dịch vụ mà frontend và đồng nghiệp gọi được. Streaming giúp câu trả lời hiện dần như ChatGPT.", "ex": [{"id": "A13.1", "lv": "Dễ", "t": "Gọi một API công khai (ví dụ api.github.com) bằng requests, parse JSON và in kết quả."}, {"id": "A13.2", "lv": "Dễ", "t": "FastAPI: GET /health, POST /echo nhận Pydantic model."}, {"id": "A13.3", "lv": "TB", "t": "CRUD in-memory cho 'notes'; validator không cho nội dung rỗng."}, {"id": "A13.4", "lv": "TB", "t": "Endpoint POST /predict nhận schema đầu vào, trả schema đầu ra; middleware ghi log thời gian xử lý."}, {"id": "A13.5", "lv": "Khó", "t": "Endpoint /chat stream từng từ bằng StreamingResponse, kèm xử lý lỗi và timeout."}], "prio": 3, "hours": 10}, {"id": "A14", "title": "SQL, SQLite & Git nâng cao", "k": ["SQL: SELECT, WHERE, JOIN, GROUP BY, ORDER BY, HAVING, chỉ mục (index), khoá chính/ngoại; sqlite3, pandas.read_sql; làm quen SQLAlchemy.", "Git: nhánh, merge, rebase cơ bản, giải quyết conflict, Pull Request, commit message có quy ước."], "ai": "Lưu lịch sử hội thoại, metadata tài liệu, log thí nghiệm. Thực tập backend/AI hầu như luôn yêu cầu SQL cơ bản và làm việc nhóm bằng Git.", "ex": [{"id": "A14.1", "lv": "Dễ", "t": "Tạo DB students, viết 5 truy vấn (JOIN, GROUP BY, ORDER BY)."}, {"id": "A14.2", "lv": "TB", "t": "Bảng messages(session_id, role, content, created_at) để lưu chat history, viết hàm lưu/đọc."}, {"id": "A14.3", "lv": "TB", "t": "Tạo nhánh feature/x, sửa, merge; chủ động tạo và giải quyết 1 conflict."}], "prio": 2, "hours": 5}]}, "B": {"intro": "Các thư viện và kỹ thuật bạn sẽ dùng hằng ngày. Học ở Tuần 4–8 theo thứ tự B1 → B10.", "mods": [{"id": "B1", "title": "NumPy — tính toán trên mảng", "k": ["ndarray, dtype, shape, reshape, axis; tạo mảng (zeros, ones, arange, linspace, eye), random với default_rng(seed).", "Indexing, slicing, boolean mask, fancy indexing; np.where, argmax, argsort.", "**Broadcasting** và **vectorization** (tránh vòng lặp Python).", "Phép toán: dot, @, sum/mean/std theo axis, concatenate/stack; np.linalg (norm, inv, eig, svd)."], "ai": "Tensor PyTorch hoạt động giống NumPy. Embedding là vector; cosine similarity = tích vô hướng chia cho tích chuẩn. Hiểu shape giúp debug phần lớn lỗi khi huấn luyện.", "ex": [{"id": "B1.1", "lv": "Dễ", "t": "Ma trận 5×5: lấy đường chéo, tổng theo hàng/cột, nhân với ma trận chuyển vị."}, {"id": "B1.2", "lv": "TB", "t": "Chuẩn hoá z-score cho từng cột bằng broadcasting."}, {"id": "B1.3", "lv": "TB", "t": "Cosine similarity giữa 1 query và ma trận 1000 vector, không dùng vòng lặp; so thời gian với bản dùng for."}, {"id": "B1.4", "lv": "Khó", "t": "Linear Regression bằng normal equation và bằng gradient descent; so kết quả với scikit-learn."}, {"id": "B1.5", "lv": "Khó", "t": "K-Means from scratch bằng NumPy; softmax ổn định số và cross-entropy."}], "prio": 3, "hours": 8}, {"id": "B2", "title": "Pandas — xử lý & phân tích dữ liệu", "k": ["Series, DataFrame; read_csv/read_json/to_csv; head, info, describe, shape.", "Chọn dữ liệu: loc/iloc, lọc boolean, query; thêm/sửa cột; apply và vì sao nên ưu tiên vectorized.", "Dữ liệu thiếu (isna, fillna, dropna), trùng lặp, ép kiểu astype; value_counts.", "groupby/agg, merge/join/concat, pivot_table, sort_values; .str và .dt; get_dummies (one-hot)."], "ai": "70–80% công việc ML là xử lý dữ liệu. Pandas dùng để làm sạch dataset, tạo feature, phân tích kết quả đánh giá mô hình.", "ex": [{"id": "B2.1", "lv": "Dễ", "t": "Titanic (Kaggle): đếm giá trị thiếu, tỉ lệ sống theo giới tính và hạng vé."}, {"id": "B2.2", "lv": "TB", "t": "Điền tuổi thiếu bằng median theo nhóm; tạo feature FamilySize, Title."}, {"id": "B2.3", "lv": "TB", "t": "Merge hai bảng, pivot_table, groupby nhiều cột."}, {"id": "B2.4", "lv": "Khó", "t": "EDA trọn vẹn cho House Prices: outlier, tương quan, 5 insight rút ra, đề xuất feature."}], "prio": 3, "hours": 8}, {"id": "B3", "title": "Trực quan hoá: Matplotlib, Seaborn", "k": ["Matplotlib: fig, ax, line/bar/hist/scatter/box, subplot, nhãn trục, chú thích.", "Seaborn: heatmap, pairplot, countplot, boxplot; Plotly (tuỳ chọn) cho biểu đồ tương tác.", "Vẽ đường cong loss/accuracy, ma trận nhầm lẫn (confusion matrix)."], "ai": "Biểu đồ giúp phát hiện overfitting, mất cân bằng lớp, outlier và là thứ bạn đưa vào báo cáo/README.", "ex": [{"id": "B3.1", "lv": "Dễ", "t": "Histogram + boxplot của cột tuổi; heatmap tương quan."}, {"id": "B3.2", "lv": "TB", "t": "Vẽ đường cong loss train/validation (dữ liệu giả lập) và nhận xét overfitting."}, {"id": "B3.3", "lv": "Khó", "t": "Dashboard 2×2 subplot tóm tắt dataset, xuất ra PNG đưa vào README."}], "prio": 2, "hours": 4}, {"id": "B4", "title": "Scikit-learn — Machine Learning cổ điển", "k": ["Quy trình: chia train/validation/test, **data leakage**, API fit/predict/transform.", "Tiền xử lý: StandardScaler, OneHotEncoder, SimpleImputer, ColumnTransformer, Pipeline.", "Mô hình: Linear/Ridge/Lasso, Logistic Regression, KNN, Decision Tree, Random Forest, Gradient Boosting (XGBoost/LightGBM), SVM, K-Means, PCA.", "Đánh giá: cross_val_score, GridSearchCV/RandomizedSearchCV, metric (xem mục D5); overfitting/underfitting, bias–variance, lớp mất cân bằng, feature importance; lưu mô hình joblib."], "ai": "Luôn làm baseline cổ điển trước khi dùng deep learning. Với dữ liệu dạng bảng, gradient boosting thường thắng mạng nơ-ron. Quy trình đánh giá ở đây dùng lại cho mọi bài toán AI.", "ex": [{"id": "B4.1", "lv": "Dễ", "t": "Titanic: Pipeline hoàn chỉnh, so sánh ≥ 3 mô hình bằng cross-validation."}, {"id": "B4.2", "lv": "TB", "t": "House Prices: hồi quy, báo RMSE và R²; Ridge vs Lasso vs Random Forest."}, {"id": "B4.3", "lv": "TB", "t": "Phân loại: in confusion matrix, precision/recall/F1, vẽ ROC và tính AUC."}, {"id": "B4.4", "lv": "TB", "t": "Tái hiện data leakage (scale trước khi split) và giải thích vì sao kết quả ảo."}, {"id": "B4.5", "lv": "Khó", "t": "Nộp bài 1 cuộc thi Kaggle 'Getting Started' (Titanic hoặc House Prices); GridSearch cho Random Forest."}, {"id": "B4.6", "lv": "Khó", "t": "K-Means + PCA để phân cụm và trực quan hoá khách hàng."}], "prio": 3, "hours": 12}, {"id": "B5", "title": "PyTorch — Deep Learning", "k": ["Tensor, thiết bị cuda/cpu, .to(device); **autograd** (requires_grad, backward).", "nn.Module, nn.Linear, hàm kích hoạt, loss (MSELoss, CrossEntropyLoss), optimizer (SGD, Adam).", "Vòng huấn luyện: zero_grad → forward → loss → backward → step; model.train()/eval(), torch.no_grad().", "Dataset/DataLoader; lưu/nạp state_dict; CNN (Conv2d, pooling); dropout, weight decay, BatchNorm; LR scheduler; early stopping; transfer learning (torchvision); TensorBoard/W&B."], "ai": "Nền tảng của mọi mô hình hiện đại; thư viện Hugging Face Transformers xây trên PyTorch. Hiểu training loop giúp bạn debug khi fine-tune.", "ex": [{"id": "B5.1", "lv": "Dễ", "t": "Tính gradient của y = x² + 3x bằng tay và bằng autograd."}, {"id": "B5.2", "lv": "TB", "t": "Linear regression bằng PyTorch (không dùng nn.Linear, sau đó dùng nn.Linear)."}, {"id": "B5.3", "lv": "TB", "t": "MLP phân loại MNIST đạt ≥ 97% accuracy; vẽ đường loss."}, {"id": "B5.4", "lv": "TB", "t": "CNN nhỏ trên CIFAR-10; thêm dropout và so sánh."}, {"id": "B5.5", "lv": "Khó", "t": "Fine-tune ResNet18 (pretrained) cho bài toán 2 lớp tự chọn."}, {"id": "B5.6", "lv": "Khó", "t": "Tự viết training loop có early stopping + lưu checkpoint tốt nhất."}], "prio": 3, "hours": 14}, {"id": "B6", "title": "NLP & Transformers với Hugging Face", "k": ["Tokenization (BPE, WordPiece), từ vựng, embedding layer; RNN/LSTM (khái niệm), **attention** và **self-attention**, kiến trúc Transformer, BERT vs GPT.", "Thư viện transformers (pipeline, AutoTokenizer, AutoModel), datasets, Trainer, sentence-transformers.", "Mô hình tiếng Việt: PhoBERT, BGE-M3, các bi-encoder tiếng Việt.", "Fine-tune hiệu quả: LoRA/PEFT (khái niệm); metric: F1, perplexity, BLEU/ROUGE."], "ai": "Đây là xương sống của GenAI. Hiểu tokenization và attention giúp giải thích context window, chi phí token, vì sao LLM 'bịa'.", "ex": [{"id": "B6.1", "lv": "Dễ", "t": "pipeline('sentiment-analysis') trên 10 câu; in token và id của câu tiếng Việt."}, {"id": "B6.2", "lv": "TB", "t": "Sinh embedding bằng sentence-transformers, tìm 3 câu giống nhất."}, {"id": "B6.3", "lv": "TB", "t": "Fine-tune mô hình nhỏ (DistilBERT/PhoBERT) cho phân loại cảm xúc trên Colab."}, {"id": "B6.4", "lv": "Khó", "t": "Cài scaled dot-product attention bằng PyTorch và kiểm tra shape từng bước."}], "prio": 3, "hours": 12}, {"id": "B7", "title": "LLM API & Prompt Engineering", "k": ["API chat (OpenAI, Anthropic, Gemini hoặc Ollama chạy local): vai trò system/user/assistant, temperature, top_p, max_tokens, token và context window.", "Structured output (JSON schema + Pydantic), function/tool calling, streaming.", "Kỹ thuật prompt: few-shot, chain-of-thought, vai trò, dùng delimiter; nhận biết prompt injection.", "Chi phí & độ trễ; khái niệm agent (vòng lặp ReAct)."], "ai": "Phần lớn công việc 'AI Engineer' hiện nay là xây ứng dụng quanh LLM. Cần biết gọi API đúng cách, kiểm soát đầu ra và chi phí.", "ex": [{"id": "B7.1", "lv": "Dễ", "t": "Gọi API chat 1 lần và in số token đã dùng."}, {"id": "B7.2", "lv": "TB", "t": "Chatbot CLI nhớ lịch sử hội thoại."}, {"id": "B7.3", "lv": "TB", "t": "Trích xuất thông tin từ văn bản thành JSON, validate bằng Pydantic và tự retry khi sai schema."}, {"id": "B7.4", "lv": "Khó", "t": "Tool calling: 2 hàm (calculator, get_weather giả) và vòng lặp agent tối giản."}, {"id": "B7.5", "lv": "Khó", "t": "Async: gọi 10 prompt song song có giới hạn đồng thời."}], "prio": 3, "hours": 8}, {"id": "B8", "title": "Embedding, Vector DB & RAG", "k": ["Embedding; độ đo cosine/dot/L2; chunking (kích thước, overlap, theo tiêu đề/đoạn) và giữ metadata.", "Vector DB: Qdrant, Chroma, FAISS, pgvector; ANN/HNSW; lọc theo metadata.", "Tìm kiếm thưa BM25 (rank-bm25), **hybrid search** với Reciprocal Rank Fusion; reranker (bi-encoder vs cross-encoder).", "Prompt grounding + trích dẫn nguồn; đánh giá: Recall@k, MRR, Ragas (faithfulness, answer relevancy, context precision/recall); quan sát hệ thống với Langfuse."], "ai": "Đây là kỹ năng được tuyển dụng nhiều nhất cho thực tập GenAI. File kế hoạch cũ của bạn tập trung đúng vào phần này.", "ex": [{"id": "B8.1", "lv": "Dễ", "t": "Chunk 1 file PDF, giữ page_number và tên file làm metadata."}, {"id": "B8.2", "lv": "TB", "t": "Embed và lưu vào Chroma/FAISS/Qdrant; viết hàm query top-k."}, {"id": "B8.3", "lv": "TB", "t": "BM25 + dense + RRF; thêm reranker (BGE-reranker hoặc Cohere)."}, {"id": "B8.4", "lv": "TB", "t": "Prompt chỉ trả lời theo ngữ cảnh, có trích dẫn [Trang X], nói 'không biết' khi thiếu thông tin."}, {"id": "B8.5", "lv": "Khó", "t": "Bộ test 20 câu hỏi (có câu gài bẫy); đo Recall@3 và so sánh Naive RAG vs Hybrid + Rerank."}], "prio": 3, "hours": 14}, {"id": "B9", "title": "Framework LLM: LangChain, LlamaIndex, LangGraph", "k": ["Khi nào nên dùng framework, khi nào tự viết; khái niệm retriever, chain, agent, graph.", "Nên tự viết bản tối giản trước (B8) để hiểu bản chất, rồi mới dùng framework."], "ai": "Nhiều công ty dùng LangChain/LlamaIndex/LangGraph; biết cả hai cách giúp bạn debug được khi framework 'ăn' mất chi tiết.", "ex": [{"id": "B9.1", "lv": "TB", "t": "Viết lại pipeline RAG bằng LlamaIndex hoặc LangChain; so sánh số dòng code và khả năng debug."}, {"id": "B9.2", "lv": "Khó", "t": "Agent đơn giản bằng LangGraph với 2 công cụ (tuỳ chọn)."}], "prio": 2, "hours": 6}, {"id": "B10", "title": "Triển khai & MLOps cơ bản", "k": ["Docker: Dockerfile, image/container, volume, docker compose.", "Giao diện nhanh: Streamlit, Gradio; quản lý secret bằng biến môi trường.", "Theo dõi thí nghiệm: MLflow hoặc Weights & Biases; khái niệm ONNX, monitoring.", "Deploy demo miễn phí: Hugging Face Spaces, Render, Railway (tuỳ chính sách hiện hành)."], "ai": "Một demo chạy được bằng một lệnh docker compose up gây ấn tượng mạnh khi nộp hồ sơ.", "ex": [{"id": "B10.1", "lv": "TB", "t": "Dockerize ứng dụng FastAPI; docker compose chạy API + Qdrant."}, {"id": "B10.2", "lv": "TB", "t": "UI Streamlit: upload PDF + khung chat."}, {"id": "B10.3", "lv": "Khó", "t": "Deploy demo lên Hugging Face Spaces; theo dõi 3 lần chạy bằng MLflow."}], "prio": 2, "hours": 8}]}, "C": {"intro": "Chỉ học phần phục vụ trực tiếp cho AI, kết hợp với code (kiểm lại bằng NumPy/PyTorch). Dành khoảng 3–4 giờ/tuần xen kẽ trong Tuần 4–6, nguồn gợi ý: 3Blue1Brown và StatQuest (xem Phần H).", "rows": [["Chủ đề", "Cần biết", "Dùng ở đâu", "Bài tập"], ["Đại số tuyến tính", "Vector, ma trận, nhân ma trận, chuyển vị, nghịch đảo, định thức, trị riêng, SVD, chuẩn (norm), tích vô hướng", "Embedding, PCA, mọi phép tính trong mạng nơ-ron", "Tự tính tay phép nhân ma trận 3×3, kiểm lại bằng NumPy; tính cosine similarity bằng tay."], ["Giải tích", "Đạo hàm, đạo hàm riêng, gradient, quy tắc chuỗi (chain rule)", "Backpropagation, gradient descent", "Tính tay đạo hàm của sigmoid và hàm loss MSE; kiểm lại bằng autograd."], ["Xác suất", "Biến ngẫu nhiên, phân phối Bernoulli/Binomial/Gaussian, kỳ vọng, phương sai, xác suất có điều kiện, định lý Bayes, MLE", "Naive Bayes, softmax, hàm loss, mô hình sinh", "Bài toán Bayes xét nghiệm bệnh; mô phỏng Gaussian bằng NumPy và vẽ histogram."], ["Thống kê", "Trung bình/trung vị/độ lệch chuẩn, tương quan, kiểm định giả thuyết, p-value, khoảng tin cậy, lấy mẫu, A/B test", "Đánh giá mô hình, EDA, so sánh hai hệ thống", "Tính khoảng tin cậy của accuracy trên tập test; so hai mô hình bằng kiểm định."], ["Tối ưu hoá", "Gradient descent, SGD, momentum, Adam, learning rate, hàm lồi vs không lồi, điểm yên ngựa", "Huấn luyện mọi mô hình", "Cài gradient descent cho f(x)=x²; thử learning rate quá lớn/quá nhỏ và quan sát."], ["Lý thuyết thông tin", "Entropy, cross-entropy, KL divergence", "Hàm loss phân loại, đánh giá LLM (perplexity)", "Tính cross-entropy của 1 dự đoán softmax bằng tay và bằng PyTorch."]]}, "D": [{"h": "D1. Cấu trúc dữ liệu & giải thuật (cho phỏng vấn thực tập)", "intro": ["LC = số bài trên LeetCode. Mục tiêu: ≥ 30 bài Easy/Medium thuộc các mẫu ★★★ trước khi nộp hồ sơ. Với mỗi bài: tự giải 20–30 phút, nếu bí thì xem lời giải, sau đó viết lại không nhìn vào ngày hôm sau."], "rows": [["Chủ đề", "Ý chính", "Độ phức tạp", "Bài luyện", "Ưu tiên"], ["Big-O & phân tích độ phức tạp", "Đếm số phép toán theo n; thời gian vs bộ nhớ", "O(1), O(log n), O(n), O(n log n), O(n²)", "Phân tích độ phức tạp của mọi bài đã giải", "★★★"], ["Hash map / Hash set", "Đánh đổi bộ nhớ lấy tốc độ tra cứu", "O(1) trung bình", "LC 1, 217, 242, 49, 347", "★★★"], ["Hai con trỏ (Two pointers)", "Hai chỉ số chạy từ hai đầu hoặc cùng chiều", "O(n)", "LC 125, 15, 11", "★★★"], ["Cửa sổ trượt (Sliding window)", "Duy trì đoạn con khi trượt", "O(n)", "LC 121, 3", "★★★"], ["Prefix sum", "Tính trước tổng tích luỹ để truy vấn nhanh", "O(n) dựng, O(1) truy vấn", "LC 238, 53", "★★"], ["Tìm kiếm nhị phân", "Chia đôi không gian tìm kiếm trên dữ liệu đã sắp", "O(log n)", "LC 704, 74, 33", "★★★"], ["Sắp xếp", "Bubble/Insertion (hiểu), Merge sort, Quick sort, Heap sort, Counting sort", "O(n log n) trung bình cho Merge/Quick/Heap", "Tự cài Merge sort & Quick sort; LC 56", "★★★"], ["Stack / Queue / Monotonic stack", "LIFO, FIFO, ngăn xếp đơn điệu", "O(n)", "LC 20, 155, 739", "★★★"], ["Danh sách liên kết", "Con trỏ next, hai con trỏ nhanh/chậm", "O(n)", "LC 206, 21, 141", "★★"], ["Cây, BST, DFS/BFS trên cây", "Duyệt tiền/trung/hậu tự, theo tầng", "O(n)", "LC 104, 226, 102, 98", "★★★"], ["Heap / Priority Queue / Top-K", "heapq; giữ K phần tử lớn nhất", "O(n log k)", "LC 215, 347", "★★"], ["Đồ thị: BFS / DFS", "Duyệt theo độ sâu/độ rộng, đếm thành phần liên thông", "O(V+E)", "LC 200, 695, 994, 133", "★★★"], ["Sắp xếp topo", "Thứ tự phụ thuộc trong đồ thị có hướng", "O(V+E)", "LC 207", "★★"], ["Dijkstra", "Đường đi ngắn nhất với trọng số không âm", "O((V+E) log V)", "LC 743", "★★"], ["Union-Find (DSU)", "Gộp/tìm tập hợp", "≈ O(α(n)) mỗi thao tác", "LC 684", "★"], ["Trie", "Cây tiền tố cho chuỗi", "O(độ dài từ)", "LC 208", "★"], ["Quy hoạch động (DP)", "Bài toán con gối nhau + công thức truy hồi", "Tuỳ bài", "LC 70, 198, 322, 300, 1143", "★★★"], ["Quay lui (Backtracking)", "Thử – sai – quay lại; sinh tập con/hoán vị", "Mũ/giai thừa", "LC 78, 46, 39, 79", "★★"], ["Tham lam (Greedy)", "Chọn tối ưu cục bộ tại mỗi bước", "Tuỳ bài", "LC 55, 56", "★★"], ["Thiết kế cấu trúc dữ liệu", "Kết hợp hash map + danh sách liên kết", "O(1) mỗi thao tác", "LC 146 (LRU Cache)", "★★"]]}, {"h": "D2. Thuật toán Machine Learning cổ điển", "intro": [], "rows": [["Thuật toán", "Loại", "Ý tưởng", "Ghi chú", "Thực hành", "Ưu tiên"], ["Linear Regression", "Hồi quy", "Khớp đường thẳng bằng cực tiểu hoá MSE (normal equation hoặc GD)", "Baseline hồi quy; dễ diễn giải; nhạy với outlier", "Cài bằng NumPy + so với sklearn", "★★★"], ["Ridge / Lasso", "Hồi quy", "Thêm phạt L2/L1 để chống overfitting; Lasso chọn đặc trưng", "Khi nhiều đặc trưng tương quan", "So sánh hệ số khi tăng alpha", "★★"], ["Logistic Regression", "Phân loại", "Sigmoid/softmax + cross-entropy; ranh giới tuyến tính", "Baseline phân loại; cho xác suất", "Cài bằng NumPy với GD", "★★★"], ["K-Nearest Neighbors", "Phân loại/hồi quy", "Nhãn theo K điểm gần nhất", "Đơn giản; chậm khi dữ liệu lớn; cần chuẩn hoá", "Cài from scratch; chọn K bằng CV", "★★★"], ["Naive Bayes", "Phân loại", "Định lý Bayes + giả định độc lập", "Phân loại văn bản nhanh", "Lọc spam bằng bag-of-words", "★★"], ["Decision Tree", "Phân loại/hồi quy", "Chia theo Gini/entropy/information gain", "Dễ hiểu; dễ overfit", "Vẽ cây bằng plot_tree", "★★★"], ["Random Forest", "Phân loại/hồi quy", "Bagging nhiều cây + chọn ngẫu nhiên đặc trưng", "Mạnh, ít chỉnh tham số; có feature importance", "Tuning bằng GridSearch", "★★★"], ["Gradient Boosting / XGBoost / LightGBM", "Phân loại/hồi quy", "Thêm cây tuần tự sửa lỗi của cây trước", "Thường tốt nhất cho dữ liệu dạng bảng", "Thi Kaggle tabular", "★★★"], ["SVM", "Phân loại", "Siêu phẳng lề lớn nhất; kernel trick", "Dữ liệu vừa/nhỏ, nhiều chiều", "So các kernel trên dữ liệu 2D", "★★"], ["K-Means", "Phân cụm", "Gán điểm vào tâm gần nhất, cập nhật tâm, lặp", "Cần chọn K (elbow, silhouette)", "Cài from scratch bằng NumPy", "★★★"], ["DBSCAN", "Phân cụm", "Cụm theo mật độ, nhận diện nhiễu", "Cụm hình dạng bất kỳ", "So với K-Means trên dữ liệu 'hai mặt trăng'", "★"], ["PCA", "Giảm chiều", "Chiếu lên các hướng phương sai lớn nhất (SVD)", "Trực quan hoá, nén đặc trưng", "Giảm MNIST xuống 2D và vẽ", "★★★"], ["t-SNE / UMAP", "Giảm chiều", "Giữ cấu trúc lân cận, phi tuyến", "Chỉ để trực quan hoá embedding", "Vẽ embedding câu có nhãn", "★"], ["Gradient Descent (Batch/SGD/Mini-batch)", "Tối ưu", "Đi ngược gradient để giảm loss", "Nền tảng huấn luyện", "Trực quan hoá đường đi trên hàm 2D", "★★★"], ["Cross-validation, Bias–Variance", "Phương pháp", "K-fold, chia train/val/test; cân bằng giữa underfit và overfit", "Mọi bài toán", "Vẽ learning curve", "★★★"]]}, {"h": "D3. Deep Learning", "intro": [], "rows": [["Chủ đề", "Ý chính", "Vai trò", "Thực hành", "Ưu tiên"], ["Perceptron / MLP", "Lớp tuyến tính + phi tuyến xếp chồng", "Nền tảng mạng nơ-ron", "Tự cài MLP 1 lớp ẩn bằng NumPy", "★★★"], ["Backpropagation", "Chain rule lan truyền gradient ngược", "Cách mạng học", "Xem 'micrograd' của Andrej Karpathy và tự cài lại", "★★★"], ["Hàm kích hoạt & Loss", "ReLU, GELU, sigmoid, softmax; MSE, cross-entropy", "Chọn đúng cặp kích hoạt–loss", "Vẽ đồ thị và đạo hàm từng hàm", "★★★"], ["Optimizer", "SGD, Momentum, RMSProp, Adam/AdamW", "Tốc độ hội tụ", "So sánh Adam vs SGD trên MNIST", "★★★"], ["Chính quy hoá", "Dropout, weight decay, BatchNorm/LayerNorm, early stopping, data augmentation", "Chống overfitting", "Thêm/bớt từng kỹ thuật, so learning curve", "★★★"], ["CNN", "Tích chập, pooling; ResNet (kết nối tắt)", "Ảnh", "CNN trên CIFAR-10; fine-tune ResNet", "★★★"], ["RNN / LSTM / GRU", "Xử lý chuỗi bằng trạng thái ẩn", "Hiểu vì sao cần attention", "Sinh văn bản mức ký tự", "★★"], ["Attention & Transformer", "Query–Key–Value, multi-head, positional encoding, encoder/decoder", "Nền tảng LLM", "Cài self-attention; đọc 'The Illustrated Transformer'", "★★★"], ["Autoencoder / VAE", "Nén và tái tạo dữ liệu", "Học biểu diễn, phát hiện bất thường", "Autoencoder trên MNIST", "★"], ["GAN / Diffusion", "Mô hình sinh ảnh", "Chỉ cần nắm khái niệm", "Đọc tổng quan, chạy thử demo", "★"], ["Transfer learning & Fine-tuning", "Dùng lại mô hình tiền huấn luyện; LoRA/PEFT", "Cách làm thực tế khi ít dữ liệu", "Fine-tune BERT nhỏ trên Colab", "★★★"]]}, {"h": "D4. NLP, Truy hồi thông tin & LLM", "intro": [], "rows": [["Thuật toán / Khái niệm", "Ý chính", "Vai trò", "Thực hành", "Ưu tiên"], ["Bag-of-Words, TF-IDF", "Vector tần suất từ có trọng số nghịch đảo tài liệu", "Baseline văn bản, tiền thân BM25", "Cài TF-IDF bằng NumPy và so với sklearn", "★★★"], ["BM25", "Xếp hạng từ khoá có chuẩn hoá độ dài tài liệu", "Nửa 'sparse' của hybrid search", "Dùng rank-bm25 trên 100 đoạn văn", "★★★"], ["Word2Vec / GloVe", "Embedding từ qua ngữ cảnh", "Hiểu ý tưởng embedding", "Tìm 'vua − đàn ông + đàn bà'", "★★"], ["Tokenization BPE / WordPiece", "Gộp cặp ký tự thường gặp thành token", "Giải thích chi phí token, từ lạ", "Cài BPE mini từ đầu", "★★"], ["Cosine similarity & kNN", "Độ đo góc giữa hai vector", "Truy hồi trong RAG", "Hàm cosine vector hoá bằng NumPy", "★★★"], ["ANN / HNSW / FAISS", "Tìm láng giềng gần đúng trên đồ thị phân tầng", "Vector DB nhanh trên dữ liệu lớn", "So FAISS flat vs HNSW về tốc độ/recall", "★★"], ["Reciprocal Rank Fusion", "Điểm = Σ 1/(k + rank) gộp nhiều danh sách xếp hạng", "Hybrid search", "Cài RRF trong 10 dòng", "★★★"], ["Bi-encoder vs Cross-encoder", "Mã hoá riêng vs mã hoá cùng cặp (chính xác hơn, chậm hơn)", "Retrieval rồi rerank", "Rerank top-20 → top-5", "★★★"], ["Prompting / Few-shot / CoT", "Điều khiển LLM bằng ví dụ và suy luận từng bước", "Ứng dụng LLM", "Bộ prompt so sánh trên 10 câu hỏi", "★★★"], ["RAG vs Fine-tuning", "Thêm tri thức ngoài vs thay đổi trọng số", "Chọn kiến trúc đúng", "Viết 1 trang so sánh ưu/nhược", "★★★"], ["RLHF / DPO", "Căn chỉnh mô hình theo sở thích con người", "Chỉ cần nắm khái niệm", "Đọc tổng quan", "★"]]}, {"h": "D5. Chỉ số đánh giá cần biết", "intro": [], "rows": [["Chỉ số", "Dùng cho", "Lưu ý"], ["Accuracy, Precision, Recall, F1", "Phân loại", "Dữ liệu mất cân bằng thì accuracy dễ đánh lừa; nên xem precision/recall"], ["ROC-AUC, PR-AUC", "Phân loại", "Đánh giá độc lập với ngưỡng; PR-AUC tốt hơn khi lớp hiếm"], ["MSE, RMSE, MAE, R²", "Hồi quy", "RMSE phạt lỗi lớn mạnh hơn MAE"], ["Silhouette score", "Phân cụm", "Đo độ tách biệt của cụm"], ["Recall@k, MRR, nDCG", "Truy hồi", "Đo khả năng tìm đúng tài liệu ở top-k"], ["Faithfulness, Answer relevancy, Context precision/recall (Ragas)", "RAG", "Đo câu trả lời có bám ngữ cảnh và đúng trọng tâm không"], ["Perplexity, BLEU, ROUGE", "Mô hình ngôn ngữ", "Dùng có chọn lọc; LLM thường cần đánh giá bằng con người hoặc LLM-judge"]]}], "Dintro": [], "E": {"intro": "Bắt đầu Thứ 2, 19/10/2026 và kết thúc Chủ nhật, 13/12/2026. Mã BT tham chiếu tới bảng bài tập (ví dụ 'BT A4.3' là bài thứ 3 của mục A4); 'LC' là bài LeetCode. Nếu trễ lịch, hãy bỏ các bài Khó và mục ★ trước, đừng bỏ đồ án.", "weeks": [{"h": "Tuần 1 (19/10 – 25/10): Python cốt lõi (1)", "goal": "Viết được chương trình nhỏ với dữ liệu, hàm, decorator.", "rows": [["Thứ 2", "A1 môi trường + Git; A2 cú pháp", "BT A1, A2.1–A2.2"], ["Thứ 3", "A2 còn lại; A3 vòng lặp & điều kiện", "BT A2.3–A2.4, A3"], ["Thứ 4", "A4 string & list", "BT A4.1–A4.2"], ["Thứ 5", "A4 dict/set/Counter", "BT A4.3–A4.5; LC 1, 217, 242"], ["Thứ 6", "A5 hàm, *args, lambda, type hints", "BT A5.1–A5.4"], ["Thứ 7 (3,5h)", "A5 decorator; A6 comprehension, generator", "BT A5.5, A6"], ["Chủ nhật (3h)", "Ôn tập + đồ án mini", "CLI 'Quản lý chi tiêu' (lưu JSON); đẩy GitHub"]]}, {"h": "Tuần 2 (26/10 – 01/11): Python cốt lõi (2)", "goal": "Làm việc với file, lỗi, OOP, test, regex.", "rows": [["Thứ 2", "A7 file, JSON/CSV, .env, argparse", "BT A7.1–A7.4"], ["Thứ 3", "A8 lỗi, logging, context manager", "BT A8"], ["Thứ 4", "A9 OOP (lớp, kế thừa)", "BT A9.1–A9.3"], ["Thứ 5", "A9 dataclass, ABC, dunder", "BT A9.4–A9.5"], ["Thứ 6", "A10 module, pytest", "BT A10.1–A10.3"], ["Thứ 7 (3,5h)", "A11 regex & văn bản tiếng Việt", "BT A11"], ["Chủ nhật (3h)", "Đồ án text_toolkit", "Package + tests + README; LC 125, 20, 121"]]}, {"h": "Tuần 3 (02/11 – 08/11): Python cho backend AI", "goal": "Dựng được API bất đồng bộ có kiểm thử.", "rows": [["Thứ 2", "A12 asyncio", "BT A12.1–A12.2"], ["Thứ 3", "A12 threading/multiprocessing, httpx", "BT A12.3–A12.4"], ["Thứ 4", "A13 HTTP + Pydantic v2", "BT A13.1"], ["Thứ 5", "A13 FastAPI cơ bản", "BT A13.2–A13.3"], ["Thứ 6", "A13 middleware, streaming", "BT A13.4–A13.5"], ["Thứ 7 (3,5h)", "A14 SQL/SQLite, lưu chat history", "BT A14"], ["Chủ nhật (3h)", "Đồ án 'Notes/Chat API'", "FastAPI + SQLite + pytest; LC 704, 206, 21"]]}, {"h": "Tuần 4 (09/11 – 15/11): NumPy, Pandas, trực quan hoá", "goal": "Tự phân tích một dataset từ đầu đến cuối.", "rows": [["Thứ 2", "B1 NumPy (mảng, indexing)", "BT B1.1–B1.2"], ["Thứ 3", "B1 broadcasting, vectorization, cosine sim", "BT B1.3"], ["Thứ 4", "B2 Pandas (chọn dữ liệu, dữ liệu thiếu)", "BT B2.1–B2.2"], ["Thứ 5", "B2 groupby, merge, pivot", "BT B2.3"], ["Thứ 6", "B3 trực quan hoá", "BT B3.1–B3.2"], ["Thứ 7 (3,5h)", "EDA trọn vẹn một dataset", "BT B2.4, B3.3; notebook sạch"], ["Chủ nhật (3h)", "Toán: đại số tuyến tính + thống kê (Phần C)", "Bài tập C; LC 49, 347, 238"]]}, {"h": "Tuần 5 (16/11 – 22/11): Machine Learning cổ điển", "goal": "Xây dựng và đánh giá được mô hình đúng quy trình.", "rows": [["Thứ 2", "B4 quy trình ML, split, tiền xử lý", "BT B4.1 (phần 1)"], ["Thứ 3", "Linear/Logistic Regression, metric", "BT B4.2–B4.3"], ["Thứ 4", "Decision Tree, Random Forest, XGBoost", "So sánh 3 mô hình"], ["Thứ 5", "Pipeline, CV, GridSearch, leakage", "BT B4.4"], ["Thứ 6", "K-Means, PCA", "BT B4.6"], ["Thứ 7 (3,5h)", "Kaggle Titanic / House Prices", "BT B4.5 — nộp bài"], ["Chủ nhật (3h)", "Cài from scratch: Linear Reg, KNN, K-Means", "BT B1.4–B1.5; LC 3, 15, 11"]]}, {"h": "Tuần 6 (23/11 – 29/11): Deep Learning với PyTorch", "goal": "Tự viết được vòng huấn luyện và fine-tune mô hình ảnh.", "rows": [["Thứ 2", "B5 tensor, autograd", "BT B5.1–B5.2"], ["Thứ 3", "nn.Module, optimizer, training loop", "Hoàn thiện BT B5.2"], ["Thứ 4", "Dataset/DataLoader + MLP MNIST", "BT B5.3"], ["Thứ 5", "CNN, dropout, BatchNorm", "BT B5.4"], ["Thứ 6", "Transfer learning (ResNet)", "BT B5.5"], ["Thứ 7 (3,5h)", "Lý thuyết Attention/Transformer", "BT B6.4 (self-attention)"], ["Chủ nhật (3h)", "Early stopping + checkpoint; xem micrograd", "BT B5.6; LC 200, 102, 104"]]}, {"h": "Tuần 7 (30/11 – 06/12): NLP, LLM và RAG", "goal": "Có pipeline RAG chạy được bằng script.", "rows": [["Thứ 2", "B6 Hugging Face pipeline, tokenizer", "BT B6.1"], ["Thứ 3", "Embedding + cosine, sentence-transformers", "BT B6.2"], ["Thứ 4", "B7 LLM API, structured output", "BT B7.1–B7.3"], ["Thứ 5", "Tool calling, chatbot", "BT B7.4–B7.5"], ["Thứ 6", "B8 chunking + vector DB", "BT B8.1–B8.2"], ["Thứ 7 (3,5h)", "BM25, hybrid RRF, reranker", "BT B8.3"], ["Chủ nhật (3h)", "Pipeline RAG hoàn chỉnh có trích dẫn", "BT B8.4; LC 207, 322, 70"]]}, {"h": "Tuần 8 (07/12 – 13/12): Đồ án hoàn chỉnh & chuẩn bị thực tập", "goal": "Một repo GitHub trình bày được; sẵn sàng phỏng vấn.", "rows": [["Thứ 2", "Đưa RAG vào FastAPI + streaming", "Cấu trúc routers/services/models"], ["Thứ 3", "Streamlit UI + lịch sử chat", "BT B10.2"], ["Thứ 4", "Docker & docker compose", "BT B10.1"], ["Thứ 5", "Đánh giá (Recall@k/Ragas) + Langfuse", "BT B8.5"], ["Thứ 6", "README, sơ đồ kiến trúc, đẩy GitHub", "Repo public, README có bảng so sánh"], ["Thứ 7 (3,5h)", "CV theo STAR, LinkedIn; ôn câu hỏi phỏng vấn (Phần G)", "CV 1 trang có link GitHub"], ["Chủ nhật (3h)", "Mock interview, rà checklist (Phần I)", "Bổ sung phần còn hổng"]]}]}, "F": {"intro": "Ba đồ án đầu là bắt buộc; mỗi đồ án phải có repo GitHub, README, hướng dẫn chạy và ảnh/sơ đồ minh hoạ.", "rows": [["P1 — text_toolkit (Tuần 1–2)", "Python thuần", "Package cài được, CLI làm sạch văn bản/đếm từ, ≥ 10 test, README, CI chạy pytest (tuỳ chọn)."], ["P2 — Phân tích & dự đoán trên dữ liệu bảng (Tuần 4–5)", "NumPy, Pandas, scikit-learn", "Notebook EDA + Pipeline ML, so sánh ≥ 3 mô hình bằng CV, nộp 1 bài Kaggle, nêu rõ hạn chế."], ["P3 — Ứng dụng RAG hỏi đáp tài liệu (Tuần 7–8)", "FastAPI, Qdrant/Chroma, BM25 + RRF, reranker, Streamlit, Docker", "Upload PDF → hỏi đáp có trích dẫn trang, streaming, lưu lịch sử, đo Recall@k trên bộ 20 câu, docker compose up chạy được, README có sơ đồ."], ["P4 (tuỳ chọn) — Phân loại ảnh/cảm xúc bằng fine-tune", "PyTorch, Hugging Face", "Fine-tune mô hình nhỏ, báo cáo learning curve và phân tích lỗi."]], "star": ["**Situation:** cần hệ thống hỏi đáp trên tài liệu tiếng Việt, hạn chế câu trả lời bịa.", "**Task:** xây dựng pipeline RAG có trích dẫn nguồn.", "**Action:** FastAPI (async), Qdrant, hybrid search (dense + BM25, RRF), reranker, Docker, Langfuse; đánh giá bằng bộ 20 câu hỏi.", "**Result:** nêu số liệu thật, ví dụ Recall@3 tăng từ X% lên Y% so với Naive RAG (chỉ ghi số bạn đo được)."]}, "G": {"intro": "Tự trả lời thành tiếng (hoặc viết ra) trước khi đọc cột gợi ý. Nên chuẩn bị cả bằng tiếng Anh.", "rows": [["Python", "List khác tuple thế nào? Khi nào dùng dict/set thay vì list?", "Mutable vs immutable; tra cứu O(1) vs O(n); tuple hashable."], ["Python", "Decorator là gì? Cho ví dụ thực tế.", "Hàm bọc hàm; @timer, @retry, @app.get; functools.wraps."], ["Python", "Generator khác list comprehension ở đâu?", "Lazy, tiết kiệm bộ nhớ, dùng khi dữ liệu lớn."], ["Python", "GIL là gì? Khi nào dùng thread, process, asyncio?", "I/O-bound → thread/asyncio; CPU-bound → multiprocessing."], ["Python", "async/await trong FastAPI giải quyết điều gì?", "Không chặn event loop khi chờ I/O (gọi LLM, DB); cẩn thận gọi hàm blocking."], ["Python", "Pydantic dùng để làm gì?", "Kiểm tra/ép kiểu dữ liệu vào-ra theo schema, sinh tài liệu OpenAPI trong FastAPI."], ["Python", "Bẫy mutable default argument là gì?", "Giá trị mặc định được tạo một lần khi định nghĩa hàm → dùng None rồi tạo mới trong thân hàm."], ["ML", "Overfitting là gì? Cách khắc phục?", "Train tốt, test kém; thêm dữ liệu, chính quy hoá, dropout, early stopping, mô hình đơn giản hơn."], ["ML", "Data leakage là gì? Cho ví dụ.", "Thông tin test lọt vào train, ví dụ scale/impute trước khi split."], ["ML", "Precision vs Recall; khi nào ưu tiên cái nào?", "Chẩn đoán bệnh ưu tiên recall; lọc spam quan trọng ưu tiên precision."], ["ML", "Bias–variance trade-off?", "Mô hình đơn giản: bias cao; phức tạp: variance cao; cần cân bằng bằng CV."], ["ML", "Gradient descent hoạt động thế nào? Learning rate quá lớn/nhỏ thì sao?", "Cập nhật tham số ngược gradient; lớn → dao động/phân kỳ, nhỏ → hội tụ chậm."], ["ML", "Vì sao cần chia train/validation/test?", "Chọn mô hình trên validation, đánh giá cuối cùng trên test chưa từng thấy."], ["DL/NLP", "Self-attention hoạt động ra sao?", "Mỗi token tạo Q, K, V; điểm = softmax(QKᵀ/√d)·V."], ["DL/NLP", "Embedding là gì? Vì sao dùng cosine similarity?", "Vector biểu diễn ngữ nghĩa; cosine đo hướng, không phụ thuộc độ dài."], ["LLM/RAG", "RAG giải quyết vấn đề gì? Khác fine-tuning thế nào?", "Bổ sung tri thức ngoài/cập nhật được, giảm bịa; fine-tune đổi hành vi/phong cách."], ["LLM/RAG", "Vì sao Naive RAG vẫn hallucinate?", "Truy hồi sai/thiếu, chunk kém, prompt không ràng buộc, mô hình bỏ qua ngữ cảnh."], ["LLM/RAG", "Hybrid search và reranking là gì? Vì sao cần?", "Dense bắt ngữ nghĩa, BM25 bắt từ khoá chính xác; RRF gộp; cross-encoder xếp lại chính xác hơn."], ["LLM/RAG", "Chọn kích thước chunk thế nào?", "Cân bằng ngữ cảnh đủ và nhiễu; thử nghiệm với Recall@k, overlap, giữ metadata."], ["LLM/RAG", "Đánh giá một hệ thống RAG ra sao?", "Retrieval: Recall@k/MRR; generation: faithfulness, answer relevancy (Ragas) + kiểm tra thủ công."], ["Thuật toán", "Hash map hoạt động thế nào? Độ phức tạp?", "Hàm băm → bucket; O(1) trung bình, O(n) xấu nhất do va chạm."], ["Thuật toán", "Khi nào dùng BFS, khi nào DFS?", "BFS cho đường đi ngắn nhất trên đồ thị không trọng số; DFS cho duyệt sâu/quay lui."]]}, "H": {"intro": "Danh sách các nguồn nổi tiếng, được cộng đồng học AI giới thiệu rộng rãi. Nội dung và điều khoản truy cập (miễn phí/trả phí) có thể thay đổi, hãy kiểm tra trực tiếp trên trang.", "rows": [["Python nền tảng", "Tài liệu chính thức 'The Python Tutorial' (docs.python.org); Real Python (realpython.com); 'Automate the Boring Stuff with Python'; khoá CS50P của Harvard."], ["Toán cho AI", "3Blue1Brown (Essence of Linear Algebra, Calculus, Neural Networks); StatQuest (Josh Starmer); khoá 'Mathematics for Machine Learning'."], ["Machine Learning", "Khoá Machine Learning Specialization (Andrew Ng); Kaggle Learn (kaggle.com/learn); sách 'Hands-On Machine Learning' (Aurélien Géron); tài liệu scikit-learn (scikit-learn.org)."], ["Deep Learning", "PyTorch Tutorials (pytorch.org/tutorials); fast.ai Practical Deep Learning; 'Dive into Deep Learning' (d2l.ai); loạt 'Neural Networks: Zero to Hero' của Andrej Karpathy."], ["NLP / LLM / RAG", "Hugging Face LLM/NLP Course (huggingface.co/learn); DeepLearning.AI short courses; tài liệu Qdrant, LlamaIndex, LangChain, Ragas, Langfuse."], ["Thuật toán", "LeetCode (leetcode.com), NeetCode 150 (neetcode.io); sách 'Grokking Algorithms'."], ["Lộ trình & cộng đồng", "roadmap.sh (AI & Data Scientist, Python, AI Engineer); Reddit r/learnmachinelearning, r/MachineLearning, r/LocalLLaMA; Stack Overflow; Kaggle Discussions."], ["Tiếng Việt", "Blog 'Machine Learning cơ bản' (machinelearningcoban.com) của Vũ Hữu Tiệp; Viblo (viblo.asia); các cộng đồng Facebook/Discord AI Việt Nam; tài liệu PhoBERT/underthesea của VinAI và cộng đồng."]]}, "I": {"intro": "Đánh dấu 'x' khi bạn tự tin giải thích và thực hành được mà không cần xem tài liệu.", "rows": [["1", "Tạo và dùng môi trường ảo, quản lý thư viện bằng requirements/pyproject", ""], ["2", "Dùng Git/GitHub thành thạo: commit, branch, merge, PR", ""], ["3", "Thao tác thành thạo list/dict/set/string, hiểu độ phức tạp", ""], ["4", "Viết hàm có type hints, decorator, generator", ""], ["5", "Đọc/ghi JSON/CSV, dùng .env, viết CLI", ""], ["6", "Xử lý lỗi + logging; viết retry/backoff", ""], ["7", "OOP: lớp, kế thừa, dataclass, ABC", ""], ["8", "Viết test pytest, tổ chức dự án thành package", ""], ["9", "Dùng regex và chuẩn hoá văn bản tiếng Việt", ""], ["10", "Giải thích và dùng asyncio / thread / process", ""], ["11", "Dựng API với FastAPI + Pydantic + SQLite", ""], ["12", "NumPy: vectorization, broadcasting, cosine similarity", ""], ["13", "Pandas: làm sạch, groupby, merge, EDA hoàn chỉnh", ""], ["14", "Đủ kỹ năng vẽ biểu đồ để trình bày kết quả", ""], ["15", "scikit-learn: Pipeline, CV, tuning, đúng metric", ""], ["16", "Giải thích được overfitting, leakage, bias–variance", ""], ["17", "PyTorch: tự viết training loop, fine-tune mô hình", ""], ["18", "Giải thích được self-attention và Transformer ở mức khái niệm", ""], ["19", "Gọi LLM API, structured output, tool calling", ""], ["20", "Xây pipeline RAG: chunk → embed → hybrid → rerank → trích dẫn", ""], ["21", "Đánh giá RAG bằng bộ test và số liệu", ""], ["22", "Docker/compose chạy được toàn bộ ứng dụng", ""], ["23", "Giải ≥ 30 bài LeetCode (Easy/Medium) với các mẫu ★★★", ""], ["24", "Repo GitHub sạch có README + sơ đồ + hướng dẫn chạy", ""], ["25", "CV theo STAR có link GitHub; trả lời được 20 câu phỏng vấn ở Phần G", ""]]}};
+
+/* ---------- helpers ---------- */
+const $ = (s,r=document)=>r.querySelector(s);
+const el=(t,a={},...c)=>{const e=document.createElement(t);for(const k in a){if(k==='class')e.className=a[k];else if(k==='text')e.textContent=a[k];else if(k.startsWith('on'))e.addEventListener(k.slice(2),a[k]);else e.setAttribute(k,a[k]);}c.flat().forEach(x=>x!=null&&e.append(x.nodeType?x:document.createTextNode(x)));return e;};
+const mem={};
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return mem[k]??null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){mem[k]=v}}};
+let done=new Set();
+try{done=new Set(JSON.parse(store.get('lt-done')||'[]'))}catch(e){}
+const saveDone=()=>store.set('lt-done',JSON.stringify([...done]));
+function bold(text){const f=document.createDocumentFragment();text.split(/\*\*/).forEach((p,i)=>{if(!p)return;f.append(i%2?el('b',{text:p}):document.createTextNode(p))});return f}
+function lvClass(l){return l==='Dễ'?'de':l==='TB'?'tb':'kho'}
+
+/* ---------- model ---------- */
+const LINES=[
+ {k:'A',color:'var(--lA)',title:'Python cốt lõi',sub:DATA.A.intro},
+ {k:'B',color:'var(--lB)',title:'Thư viện & kỹ năng cho AI',sub:DATA.B.intro},
+ {k:'C',color:'var(--lC)',title:'Toán cho AI',sub:'Chỉ học phần phục vụ trực tiếp cho AI, kiểm lại bằng NumPy/PyTorch (Tuần 4–6).'},
+ {k:'D',color:'var(--lD)',title:'Thuật toán cần học',sub:'Cấu trúc dữ liệu, ML cổ điển, Deep Learning, NLP/LLM và chỉ số đánh giá.'},
+ {k:'F',color:'var(--lF)',title:'Đồ án portfolio',sub:DATA.F.intro},
+];
+const ST={}; // id -> station
+const dShort={D1:'Cấu trúc dữ liệu & giải thuật',D2:'ML cổ điển',D3:'Deep Learning',D4:'NLP, truy hồi & LLM',D5:'Chỉ số đánh giá'};
+function build(){
+  const weeksOf={};
+  const add=(id,w)=>{(weeksOf[id]=weeksOf[id]||new Set()).add(w)};
+  DATA.E.weeks.forEach(w=>{
+    const n=+w.h.match(/Tuần (\d+)/)[1];
+    const txt=w.rows.map(r=>r.join(' ')).join(' ');
+    (txt.match(/\b[AB]\d{1,2}\b/g)||[]).forEach(id=>add(id,n));
+    if(/LC/.test(txt))add('D1',n);
+  });
+  [4,5,6].forEach(n=>['C1','C2','C3','C4','C5','C6'].forEach(i=>add(i,n)));
+  add('D2',5);add('D3',6);add('D4',7);add('D5',5);add('D5',8);
+  [1,2].forEach(n=>add('P1',n));[4,5].forEach(n=>add('P2',n));[7,8].forEach(n=>add('P3',n));
+  const out={A:[],B:[],C:[],D:[],F:[]};
+  for(const k of ['A','B']) DATA[k].mods.forEach(m=>{
+    const s={id:m.id,line:k,kind:'mod',code:m.id,label:m.title,prio:m.prio,m,ex:m.ex.map(e=>e.id)};
+    out[k].push(s);ST[s.id]=s;
+  });
+  DATA.C.rows.slice(1).forEach((r,i)=>{
+    const id='C'+(i+1);const s={id,line:'C',kind:'c',code:id,label:r[0].replace(/\n/g,' '),prio:2,row:r,ex:[id]};
+    out.C.push(s);ST[id]=s;
+  });
+  DATA.D.forEach((d,i)=>{
+    const id='D'+(i+1);
+    const s={id,line:'D',kind:'d',code:id,label:dShort[id]||d.h,prio:3,d,ex:d.rows.slice(1).map((r,j)=>id+':'+j)};
+    out.D.push(s);ST[id]=s;
+  });
+  DATA.F.rows.forEach((r,i)=>{
+    const id='P'+(i+1);const mm=r[0].match(/^(P\d)\s*(?:—|-|–)\s*(.*)$/);
+    const s={id,line:'F',kind:'p',code:id,label:(mm?mm[2]:r[0]).replace(/\(Tuần[^)]*\)/,'').replace(/\(tuỳ chọn\)/,'').trim(),prio:i<3?3:1,row:r,ex:[id]};
+    out.F.push(s);ST[id]=s;
+  });
+  Object.values(ST).forEach(s=>s.weeks=[...(weeksOf[s.id]||[])].sort((a,b)=>a-b));
+  return out;
+}
+const MAP=build();
+const WEEKS=DATA.E.weeks.map(w=>{const m=w.h.match(/Tuần (\d+) \(([^)]+)\):\s*(.*)/);return{n:+m[1],dates:m[2],title:m[3],goal:w.goal,rows:w.rows}});
+const allEx=()=>Object.values(ST).flatMap(s=>s.ex);
+const progOf=s=>{const t=s.ex.length;const d=s.ex.filter(x=>done.has(x)).length;return{t,d}};
+
+/* ---------- state ---------- */
+const state={sel:null,week:null};
+
+/* ---------- diagram engine ---------- */
+const hosts=[];
+function dotSVG(s,color){
+  const r=s.prio===3?12:s.prio===2?9.5:7;
+  const {t,d}=s.progress||{t:0,d:0};
+  const NS='http://www.w3.org/2000/svg';
+  const svg=document.createElementNS(NS,'svg');svg.setAttribute('viewBox','0 0 32 32');svg.setAttribute('class','dot');svg.setAttribute('aria-hidden','true');
+  const mk=(n,a)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);return e};
+  svg.append(mk('circle',{class:'ring',cx:16,cy:16,r:r+5,fill:'none',stroke:'var(--sel)','stroke-width':2}));
+  svg.append(mk('circle',{cx:16,cy:16,r:r+2,fill:'var(--paper)',stroke:'var(--paper)','stroke-width':3}));
+  svg.append(mk('circle',{cx:16,cy:16,r,fill:'var(--paper)',stroke:color,'stroke-width':4}));
+  const inner=r-2;
+  if(t&&d===t){svg.append(mk('circle',{cx:16,cy:16,r:r,fill:color}));
+    svg.append(mk('path',{d:`M${16-r*.38} 16.4 l${r*.28} ${r*.3} l${r*.5} -${r*.6}`,fill:'none',stroke:'var(--paper)','stroke-width':2.4,'stroke-linecap':'round','stroke-linejoin':'round'}));}
+  else if(t&&d>0){const a=2*Math.PI*d/t-Math.PI/2;const x=16+inner*Math.cos(a),y=16+inner*Math.sin(a);
+    svg.append(mk('path',{d:`M16 16 L16 ${16-inner} A${inner} ${inner} 0 ${d/t>.5?1:0} 1 ${x} ${y} Z`,fill:color}));}
+  return svg;
+}
+function layout(h){
+  const {host,nodes,color,click}=h;
+  const W=host.clientWidth||320;const small=W<560;
+  const pad=30,minStep=small?92:116,rowH=small?124:130,cy=22;
+  const n=Math.max(2,Math.min(nodes.length,Math.floor((W-2*pad)/minStep)));
+  const step=(W-2*pad)/n;const rows=Math.ceil(nodes.length/n);
+  host.style.height=(rows*rowH-6)+'px';
+  host.textContent='';
+  const NS='http://www.w3.org/2000/svg';
+  const svg=document.createElementNS(NS,'svg');svg.setAttribute('class','track');svg.setAttribute('width',W);svg.setAttribute('height',rows*rowH);
+  const pos=nodes.map((s,i)=>{const r=Math.floor(i/n),c=i%n,col=r%2?n-1-c:c;return{x:pad+(col+.5)*step,y:cy+r*rowH}});
+  let d='';
+  const bulge=(step/2+18)/0.75;
+  for(let r=0;r<rows;r++){
+    const rp=pos.slice(r*n,(r+1)*n);
+    rp.forEach((p,i)=>{d+=(r===0&&i===0?'M':i===0?'':'L')+(i===0&&r>0?'':`${p.x} ${p.y} `)});
+    if(r<rows-1){const e=rp[rp.length-1];const sgn=r%2?-1:1;d+=`C ${e.x+sgn*bulge} ${e.y} ${e.x+sgn*bulge} ${e.y+rowH} ${e.x} ${e.y+rowH} `;}
+  }
+  const p=document.createElementNS(NS,'path');p.setAttribute('d',d);p.setAttribute('fill','none');p.setAttribute('stroke',color);p.setAttribute('stroke-width',8);p.setAttribute('stroke-linecap','round');p.setAttribute('stroke-linejoin','round');
+  svg.append(p);host.append(svg);
+  nodes.forEach((s,i)=>{
+    s.progress=progOf(s);
+    const dim=state.week&&!(s.weeks||[]).includes(state.week)&&s.line!=='E';
+    const w=step-8;
+    const b=el('button',{class:'st'+(state.sel===s.id?' sel':'')+(dim?' dim':''),type:'button','data-id':s.id,style:`left:${pos[i].x-w/2}px;top:${pos[i].y-16}px;width:${w}px;--lc:${color}`,title:s.code+' – '+s.label,'aria-label':s.code+', '+s.label+(s.progress.t?`, đã làm ${s.progress.d}/${s.progress.t} bài`:''),onclick:()=>click(s)});
+    b.append(dotSVG(s,color),el('span',{class:'lab'},el('b',{text:s.code}),s.label));
+    host.append(b);
+  });
+}
+function renderLines(){
+  const box=$('#lines');box.textContent='';
+  hosts.length=0;
+  LINES.forEach(L=>{
+    const sec=el('section',{class:'line',id:'line'+L.k,style:`--lc:${L.color}`},
+      el('div',{class:'line-head'},el('span',{class:'badge',text:L.k}),el('div',{},el('h2',{text:(L.k==='F'?'Phần F':'Phần '+L.k)+' · '+L.title}),el('p',{text:L.sub}))));
+    const host=el('div',{class:'host'});sec.append(host);box.append(sec);
+    hosts.push({host,nodes:MAP[L.k],color:L.color,click:s=>selectStation(s.id)});
+  });
+  // week line
+  const he=$('#hostE');
+  const wn=WEEKS.map(w=>({id:'W'+w.n,line:'E',code:'T'+w.n,label:w.dates.replace(/\s/g,'')+' · '+w.title,prio:3,ex:[],weeks:[w.n],wk:w.n}));
+  hosts.push({host:he,nodes:wn,color:'var(--lE)',click:s=>selectWeek(s.wk),week:true});
+  layoutAll();
+}
+function layoutAll(){
+  hosts.forEach(h=>{
+    if(h.week){h.nodes.forEach(s=>{s.sel=state.week===s.wk});}
+    layout(h);
+    if(h.week&&state.week){const b=h.host.querySelector(`[data-id="W${state.week}"]`);b&&b.classList.add('sel');}
+  });
+}
+let rt;new ResizeObserver(()=>{clearTimeout(rt);rt=setTimeout(layoutAll,60)}).observe($('#diagram'));
+
+/* ---------- linkify ---------- */
+function linkify(text){
+  const f=document.createDocumentFragment();
+  const re=/\b([AB]\d{1,2})(\.\d+)?\b|Phần ([CDGI])\b/g;let last=0,m;
+  while((m=re.exec(text))){
+    f.append(text.slice(last,m.index));
+    if(m[1]&&ST[m[1]]){f.append(el('button',{class:'chip',type:'button',onclick:()=>selectStation(m[1],true),text:m[0]}))}
+    else if(m[3]){const t=m[3];f.append(el('button',{class:'chip',type:'button',onclick:()=>{ if(t==='C'||t==='D')selectStation(t+'1',true); else document.getElementById(t==='G'?'secG':'secI').scrollIntoView({behavior:'smooth'});},text:m[0]}))}
+    else f.append(m[0]);
+    last=m.index+m[0].length;
+  }
+  f.append(text.slice(last));return f;
+}
+
+/* ---------- weeks ---------- */
+function selectWeek(n){
+  state.week=state.week===n?null:n;
+  const box=$('#weekbox');
+  if(!state.week){box.hidden=true;box.textContent='';}
+  else{
+    const w=WEEKS.find(x=>x.n===n);
+    box.hidden=false;box.textContent='';
+    box.append(el('h3',{text:`Tuần ${w.n} (${w.dates}): ${w.title}`}),el('p',{class:'goal',text:'Mục tiêu: '+w.goal}));
+    w.rows.forEach(r=>box.append(el('div',{class:'dayrow'},el('div',{class:'d',text:r[0]}),el('div',{class:'c'},linkify(r[1]),el('small',{},linkify(r[2]))))));
+    box.append(el('button',{class:'btn clear',type:'button',text:'Bỏ chọn tuần',onclick:()=>selectWeek(n)}));
+  }
+  layoutAll();
+}
+
+/* ---------- panel ---------- */
+const stage=$('.stage');try{if(store.get('lt-xl')==='1')stage.classList.add('xl')}catch(e){}
+const panel=$('#panel'),scrim=$('#scrim');
+const wide=()=>matchMedia('(min-width:1080px)').matches;
+function closePanel(){panel.classList.remove('open');scrim.classList.remove('on');}
+scrim.onclick=closePanel;
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide())closePanel()});
+function checkbox(id,labelNode,cls){
+  const cid='cb-'+id.replace(/[^\w]/g,'_');
+  const inp=el('input',{type:'checkbox',id:cid});inp.checked=done.has(id);
+  inp.onchange=()=>{inp.checked?done.add(id):done.delete(id);saveDone();refresh();};
+  return[inp,el('label',{for:cid},labelNode)];
+}
+function stars(n){return '★'.repeat(n)+' '+(n===3?'Bắt buộc':n===2?'Nên học':'Tuỳ chọn')}
+function renderPanel(){
+  panel.textContent='';
+  const s=state.sel&&ST[state.sel];
+  if(!s){
+    panel.style.setProperty('--pc','var(--ink)');
+    panel.append(el('h2',{text:'Cách dùng sơ đồ'}),el('p',{style:'color:var(--muted);margin:6px 0 0',text:'Mỗi đường là một phần của lộ trình, mỗi ga là một mục cần học. Chọn một ga để mở chi tiết ở đây.'}));
+    panel.append(el('h3',{text:'Mục tiêu thực tế trong 8 tuần'}),el('ul',{},DATA.P0.goals.map(g=>el('li',{},bold(g)))));
+    panel.append(el('h3',{text:'Nhịp học đề xuất'}),el('ul',{},DATA.P0.rhythm.map(g=>el('li',{},bold(g)))));
+    return;
+  }
+  const L=LINES.find(l=>l.k===s.line);panel.style.setProperty('--pc',L.color);
+  panel.append(el('button',{class:'pexp',type:'button',text:stage.classList.contains('xl')?'Thu hẹp':'Mở rộng',onclick:()=>{stage.classList.toggle('xl');store.set('lt-xl',stage.classList.contains('xl')?'1':'0');renderPanel();layoutAll();}}),el('button',{class:'pclose',type:'button','aria-label':'Đóng',text:'×',onclick:closePanel}));
+  panel.append(el('div',{class:'pcode'},el('i'),`Phần ${s.line} · ${s.code}`));
+  if(s.kind==='mod'){
+    const m=s.m;
+    panel.append(el('h2',{text:m.title}));
+    panel.append(el('div',{class:'meta'},el('span',{text:stars(m.prio)}),el('span',{text:`${m.hours} giờ gợi ý`})));
+    weekChips(s);
+    panel.append(el('h3',{text:'Kiến thức cần nắm'}),el('ul',{class:'kcols'},m.k.map(k=>el('li',{},bold(k)))));
+    panel.append(el('h3',{text:'Liên quan đến AI'}),el('p',{class:'why',text:m.ai}));
+    panel.append(el('h3',{text:'Bài tập thực hành'}),el('ul',{class:'ex'},m.ex.map(e=>el('li',{},...checkbox(e.id,[el('span',{class:'id',text:e.id}),el('span',{class:'lv '+lvClass(e.lv),text:e.lv}),e.t])))));
+  }else if(s.kind==='c'){
+    const r=s.row;
+    panel.append(el('h2',{text:r[0].replace(/\n/g,' ')}));
+    panel.append(el('div',{class:'meta'},el('span',{text:'Học xen kẽ 3–4 giờ/tuần, Tuần 4–6'})));
+    weekChips(s);
+    panel.append(el('h3',{text:'Cần biết'}),el('p',{text:r[1].replace(/\n/g,' ')}),el('h3',{text:'Dùng ở đâu'}),el('p',{class:'why',text:r[2].replace(/\n/g,' ')}));
+    panel.append(el('h3',{text:'Bài tập'}),el('ul',{class:'ex'},el('li',{},...checkbox(s.id,r[3].replace(/\n/g,' ')))));
+  }else if(s.kind==='d'){
+    const d=s.d;const head=d.rows[0];
+    panel.append(el('h2',{text:d.h.replace(/^D\d\.\s*/,'')}));
+    weekChips(s);
+    d.intro.forEach(t=>panel.append(el('p',{style:'color:var(--muted);margin:8px 0 0'},bold(t))));
+    const isEval=s.id==='D5';
+    panel.append(el('h3',{text:isEval?'Các chỉ số':'Danh sách mục'}));
+    d.rows.slice(1).forEach((r,j)=>{
+      const id=s.id+':'+j;
+      const card=el('div',{class:'rowcard'});
+      const tick=el('div',{class:'tick'});
+      const [inp,lab]=checkbox(id,r[0].replace(/\n/g,' '));
+      lab.className='h4l';lab.style.cssText='font:700 16px var(--display);cursor:pointer';
+      tick.append(inp,lab);card.append(tick);
+      const dl=el('dl');
+      for(let c=1;c<r.length;c++){if(!r[c])continue;dl.append(el('dt',{text:head[c]}),el('dd',{text:r[c].replace(/\n/g,' ')}))}
+      card.append(dl);panel.append(card);
+    });
+  }else if(s.kind==='p'){
+    const r=s.row;
+    panel.append(el('h2',{text:r[0].replace(/\n/g,' ')}));
+    weekChips(s);
+    panel.append(el('h3',{text:'Công nghệ'}),el('p',{text:r[1].replace(/\n/g,' ')}),el('h3',{text:'Tiêu chí hoàn thành'}),el('p',{class:'why',text:r[2].replace(/\n/g,' ')}));
+    panel.append(el('h3',{text:'Trạng thái'}),el('ul',{class:'ex'},el('li',{},...checkbox(s.id,'Đã hoàn thành đồ án này'))));
+    if(s.id==='P3'){
+      panel.append(el('h3',{text:'Mẫu mô tả dự án trong CV (STAR)'}),el('ul',{class:'star'},DATA.F.star.map(x=>el('li',{},bold(x)))));
+    }
+  }
+  function weekChips(s){
+    if(!s.weeks.length)return;
+    const w=el('div',{class:'meta'},el('span',{text:'Học ở:'}),...s.weeks.map(n=>el('button',{class:'wk',type:'button',text:'Tuần '+n,onclick:()=>{selectWeek(n);if(state.week===n)document.getElementById('lineE').scrollIntoView({behavior:'smooth'})}})));
+    panel.append(w);
+  }
+}
+function selectStation(id,fromChip){
+  state.sel=id;renderPanel();layoutAll();
+  if(!wide()){panel.classList.add('open');scrim.classList.add('on');}
+  panel.scrollTop=0;
+  if(fromChip&&wide()){const b=document.querySelector(`[data-id="${id}"]`);b&&b.scrollIntoView({behavior:'smooth',block:'center'});}
+}
+
+/* ---------- progress ---------- */
+function refresh(){
+  const ids=allEx();const t=ids.length;const d=ids.filter(x=>done.has(x)).length;
+  const p=t?Math.round(d/t*100):0;
+  $('#pctNum').textContent=p+'%';$('#pctTxt').textContent=`${d}/${t} bài đã làm`;$('#pctBar').style.width=p+'%';
+  layoutAll();
+}
+
+/* ---------- lower sections ---------- */
+function renderLower(){
+  // checklist
+  $('#chkIntro').textContent=DATA.I.intro;
+  const ul=$('#chk');
+  const upd=()=>{const t=DATA.I.rows.length-1;const d=DATA.I.rows.slice(1).filter(r=>done.has('chk'+r[0])).length;$('#chkCount').textContent=`${d}/${t} kỹ năng`};
+  DATA.I.rows.slice(1).forEach(r=>{const id='chk'+r[0];const li=el('li',{});
+    const inp=el('input',{type:'checkbox',id:'c'+r[0]});inp.checked=done.has(id);
+    inp.onchange=()=>{inp.checked?done.add(id):done.delete(id);saveDone();upd();};
+    li.append(inp,el('label',{for:'c'+r[0]},r[0]+'. '+r[1]));ul.append(li);});
+  upd();
+  // interview
+  $('#gIntro').textContent='';
+  const groups=[...new Set(DATA.G.rows.slice(1).map(r=>r[0]))];
+  let cur='Tất cả';
+  const fl=$('#gFilters'),list=$('#gList');
+  const draw=()=>{
+    fl.textContent='';['Tất cả',...groups].forEach(g=>fl.append(el('button',{type:'button','aria-pressed':String(g===cur),text:g,onclick:()=>{cur=g;draw()}})));
+    list.textContent='';
+    DATA.G.rows.slice(1).filter(r=>cur==='Tất cả'||r[0]===cur).forEach(r=>list.append(el('details',{},el('summary',{},el('span',{},el('span',{class:'grp',text:r[0]}),r[1])),el('p',{class:'ans',text:r[2]}))));
+  };
+  draw();
+  const ip=el('p',{style:'color:var(--muted);margin:10px 0 0',text:DATA.G.intro});$('#gFilters').before(ip);
+  // resources
+  $('#hIntro').textContent=DATA.H.intro;
+  DATA.H.rows.slice(1).forEach(r=>$('#hList').append(el('div',{},el('b',{text:r[0]}),el('span',{text:r[1]}))));
+  // libs
+  const tb=$('#libs');DATA.P0.libs.forEach(r=>tb.append(el('tr',{},el('td',{text:r[0]}),el('td',{},el('code',{text:r[1]})),el('td',{},linkify(r[2])))));
+}
+
+/* ---------- misc ---------- */
+$('#resetBtn').onclick=()=>{if(confirm('Xoá toàn bộ tiến độ đã đánh dấu?')){done=new Set();saveDone();location.reload();}};
+$('#themeBtn').onclick=()=>{
+  const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;
+  r.dataset.theme=dark?'light':'dark';store.set('lt-theme',r.dataset.theme);
+};
+const th=store.get('lt-theme');if(th)document.documentElement.dataset.theme=th;
+
+renderLines();renderPanel();renderLower();refresh();
+</script>
+</body>
+</html>
